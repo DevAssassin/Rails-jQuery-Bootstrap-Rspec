@@ -1,0 +1,19 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Import Contacts
+        %div{:class => "widget_content no-padding"}
+          = semantic_form_for @import do |f|
+            = f.inputs do
+              - if current_scope.is_a? Account
+                = f.input :program, :as => :select, :collection => programs
+              = f.input :person_type, :as => :select, :collection => PeopleImport::ImportablePersonTypes, :include_blank => false
+              = f.input :file, :as => :file
+              %p{:"style" => "padding-left:210px;color:red"}
+                *File must be in csv format
+            .submit-row
+              = submit_or_cancel :cancel => people_path
+

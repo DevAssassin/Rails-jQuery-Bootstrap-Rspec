@@ -1,0 +1,9 @@
+= semantic_form_for [@program, @item] do |f|
+  = f.inputs do
+    = f.input :start_time, :input_html => { :class => 'datetime_picker' }, :hint => "In your current time zone: #{Time.zone}"
+    = f.input :end_time, :input_html => { :class => 'datetime_picker' }, :hint => "In your current time zone: #{Time.zone}"
+    = f.input :message, :as => :text
+    = f.input :message_type, :as => :select, :collection => RecruitingCalendarItem::MessageTypes, :include_blank => false
+  = f.buttons do
+    = submit_or_cancel :cancel => program_recruiting_calendar_items_path(@program)
+

@@ -1,0 +1,27 @@
+%div{:class => "actions textCenter"}
+  %ul
+    %li
+      %a{:href => new_recruit_path}
+        =image_tag("/assets/icons/gray/glyphicons_113_justify.png")
+        Add Recruit
+    -if current_scope.is_a? Program
+      %li
+        %a{:href => mass_new_people_path}
+          =image_tag("/assets/icons/gray/glyphicons_043_group.png")
+          Update Profile
+    %li
+      %a{:href => new_coach_path}
+        =image_tag("/assets/icons/gray/glyphicons_043_group.png")
+        Add Coach
+    %li
+      %a{:href => new_staff_path}
+        =image_tag("/assets/icons/gray/glyphicons_034_old_man.png")
+        Add Staff
+    %li
+      %a{:href => new_rostered_player_path}
+        =image_tag("/assets/icons/gray/glyphicons_034_old_man.png")
+        Add Player
+    %li
+      %a{:href => new_other_path}
+        =image_tag("/assets/icons/gray/glyphicons_034_old_man.png")
+        Add Other

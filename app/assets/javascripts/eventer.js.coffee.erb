@@ -1,0 +1,26 @@
+$('.rename_link').live 'click', (e) ->
+  e.preventDefault()
+  $clicked = $(this)
+  $clicked.closest('.custom_field').addClass('rename')  
+
+$('.removeEvent, .delete_link').live 'click', (e) ->
+  e.preventDefault()
+  hiddenfield = $(this).prev('input[type="hidden"]')
+  if hiddenfield.length != 0
+    hiddenfield.val('1').appendTo($(this).closest('form'))
+  $(this).closest('.event, .custom_field').hide()
+  $(this).prev('li').hide()
+  $(this).hide()
+
+$(document).ready ->
+  $('#addEvent, #add_link').click (e) ->
+    e.preventDefault()
+    template = $('#eventTemplate').tmpl({index: $('li.event, li.custom_field').size()})
+    $('li.add-item').before(template)
+
+    $('input.date_picker').datepicker
+      showOn: "button"
+      buttonImage: "<%= asset_path 'calendar.gif' %>"
+      buttonImageOnly: true
+      dateFormat: 'yy-mm-dd'
+      constrainInput: false

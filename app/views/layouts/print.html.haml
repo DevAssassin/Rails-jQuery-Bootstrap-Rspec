@@ -1,0 +1,8 @@
+!!! 5
+%html
+  %head
+    = render :partial => 'layouts/head'
+    = csrf_meta_tag
+  %body#print
+    = yield
+

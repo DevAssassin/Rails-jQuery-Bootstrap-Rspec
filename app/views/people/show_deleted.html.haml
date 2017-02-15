@@ -1,0 +1,11 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            = @person.name
+        .widget_content.no-padding 
+          %h2 This recruit has been deleted.
+          %h3
+            =link_to "Restore", restore_person_path(@person)

@@ -1,0 +1,14 @@
+= semantic_form_for [:admin, @account] do |f|
+  = f.inputs do
+    = f.input :name
+    = f.input :allow_phonecalls, :as => :boolean
+    = f.input :allow_sms, :as => :boolean
+    = f.input :can_sms_recruits, :as => :boolean
+    = f.input :compliance, :as => :boolean
+    = f.input :rules_engine, :as => :boolean
+    = f.input :profile_bubbles, :as => :boolean
+    = f.input :free, :as => :boolean
+  = f.buttons do
+    .submit-row
+      = submit_or_cancel :cancel => admin_accounts_path
+

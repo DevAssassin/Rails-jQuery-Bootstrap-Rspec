@@ -1,0 +1,28 @@
+#form
+  %h1= @form.task && @form.task.form_group ? @form.task.form_group.name : @form.name
+  - unless @relavent_assignments.blank?
+    #relavent-assignments
+      - @relavent_assignments.each do |assignment|
+        .relavent-assignment
+          - if assignment.completed?
+            %p.complete-meta
+              Filled out by #{assignment.assignee.name}
+            - if assignment.completed_form
+              = form_tag('#', :class => 'relavent-completed-form') do
+                = assignment.completed_form.form_html_with_data.html_safe
+          - else
+            %p.complete-meta
+              Waiting to be filled out by #{assignment.assignee.name}
+            = form_tag('#', :class => 'relavent-form') do
+              = assignment.form.sanitized_html.html_safe
+
+  = form_tag(form_submit_url(@form), :id => 'form-complete') do
+    = hidden_field_tag :auth_token, controller.auth_token if controller.auth_token
+    = hidden_field_tag :task_id, params[:task_id] if params[:task_id]
+    - if program_id = params[:program_id] || @form.task.try(:program_id)
+      = hidden_field_tag :program_id, program_id
+    = hidden_field_tag :assignment_id, params[:assignment_id] if params[:assignment_id]
+    = hidden_field_tag :submitter_name, params[:submitter_name] if params[:submitter_name]
+    = @form.sanitized_html.html_safe
+    %br
+    = submit_tag 'Submit'

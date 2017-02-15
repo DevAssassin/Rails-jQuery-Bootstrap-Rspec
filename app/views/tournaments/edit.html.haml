@@ -1,0 +1,13 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Edit #{@tournament.name}
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          = render "form"

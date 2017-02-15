@@ -1,0 +1,60 @@
+.header_wrapper
+  .globalmsg
+    - if m = global_message
+      %div{:class => (m.alert? ? "redalert" : "bluenotice")}= m.message
+  .container-fluid
+    .row-fluid
+      =link_to image_tag("logo.png", :border => 0), '', {:class => 'logo mr10'}
+      - if current_user
+        #scope-switcher{:class => "d-i-b mr10 hmt5"}
+          .current-scope
+            - if params[:controller] != 'admin/dashboard' && params[:controller] != 'admin/accounts' && params[:controller] != 'admin/users' && params[:controller] != 'admin/notifications' && params[:controller] != 'admin/stats'
+              = form_tag change_scope_path do
+                = scope_pulldown
+        #global-search-box{:class => "d-i-b mr10 hmt5"}
+          = form_tag people_path, :method => :get do
+            = text_field_tag :"global_search", nil, :class => "autocomplete-people", :placeholder => "Search by name", :"data-url" => "/people/search.json", "data-update" => "#global_search"
+        %ul{:class => "user_nav"}
+          %li{:class => "dropdown"}
+            %a{:class => "tips icon_settings menuDrop", :rel => "tooltip", :title => "Settings",:href => "javascript:void(0);", :onclick => "checkingDropdown(this);return false;"}
+            %ul{:class => "dropdown-menu pull-right gradient user_dropdown"}
+              %li
+                = link_to edit_user_registration_path do
+                  %i{:class => 'icon-user'}
+                  My Account
+              - if current_user.superuser?
+                %li
+                  = link_to admin_path do
+                    %i{:class => 'icon-user'}
+                    Admin
+              %li
+                = link_to 'https://scoutforcecom.freshdesk.com' do
+                  %i{:class => 'icon-cog'}
+                  Help
+              %li
+                = link_to destroy_user_session_path do
+                  %i{:class => 'icon-share-alt'}
+                  Log Out
+          %li= link_to "", destroy_user_session_path, :class => "tips icon_logout", :title => "Log Out"
+          %li
+            %span
+          %li
+
+-#  - if current_user
+-#    = tabs_tag :builder => TabBuilder, :open_tabs => { :id => 'sitesections' } do |tab|
+-#      - if current_scope.is_a? Program
+-#        = tab.dashboard "Dashboard", root_path
+-#        = tab.contacts "Contacts", recruits_path(:queries => default_person_query)
+-#        = tab.boards "Boards", program_recruit_boards_path(current_scope)
+-#        = tab.institutions "Institutions", institutions_path
+-#        - if current_account.compliance?
+-#          = tab.tasks "Tasks", tasks_url
+-#          = tab.forms "Forms", form_groups_url
+-#        = tab.reports "Reports", reports_path
+-#      - elsif current_scope.is_a? Account
+-#        = tab.dashboard "Dashboard", account_dashboard_url(current_scope)
+-#        = tab.contacts "Contacts", coaches_url(:queries => default_person_query)
+-#        = tab.tasks "Tasks", tasks_url
+-#        = tab.forms "Forms", form_groups_url
+-#        = tab.reports "Reports", reports_path
+-#        = tab.rules "Rules", rules_path if current_account.rules_engine?

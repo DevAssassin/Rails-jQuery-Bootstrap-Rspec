@@ -1,0 +1,18 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Tasks
+        = render(:partial => 'subnav')
+        %div{:class => "widget_content no-padding", :id => "recruit-board"}         
+          #sidebar
+            %ul.side-actions
+              %li.add-task
+                = link_to "Create Task", new_task_path,:class => "btn btn-success btn-large"
+          #sidebar-left-sec        
+            - if @person
+              %h1 Assigned to #{@person.name}
+            = render_cell :task, :list, :tasks => @tasks, :person => @person
+          .clear

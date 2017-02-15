@@ -1,0 +1,55 @@
+li.autocomplete-school-menu {
+  .meta {
+    font-size: 80%;
+  }
+}
+
+.institution-dialog, .college-dialog, .club-dialog  {
+  display:none;
+}
+
+.institution-header {
+  @include pie-clearfix;
+
+  //.clearfix { clear: both; }
+
+  border-bottom:1px solid $border;
+  margin-bottom: 10px;
+
+  .actions ul {
+    @include horizontal-list;
+    float:right;
+  }
+
+
+  .institution-info {
+    @include column(38, true);
+    margin-bottom: 10px;
+
+    h1 {
+      display:inline;
+      clear:both;
+    }
+  }
+}
+
+.institution-list-widget {
+
+  .text-search, .user-filter {
+    @include inline-block;
+    width: auto;
+    float: none;
+    margin: 5px 5px 5px 0;
+
+    input[type=text] {
+      width: 150px;
+    }
+  }
+
+  fieldset {
+    border: 0 none;
+    padding: 0;
+    margin: 0;
+  }
+}
+

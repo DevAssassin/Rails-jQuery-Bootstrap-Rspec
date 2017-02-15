@@ -1,0 +1,90 @@
+@import "blueprint";
+
+// To generate css equivalent to the blueprint css but with your configuration applied, uncomment:
+// @include blueprint-print
+
+//Recommended Blueprint configuration with scoping and semantic layout:
+body.bp {
+  @include blueprint-print(true);
+
+}
+
+a.print {
+  display: none;
+}
+
+.printable-inline {
+  display: inline;
+}
+
+.printable-block {
+  display: block;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+// Style recruit page for print
+body#person-show {
+  font-size: 12pt;
+  background-color: #fff;
+  #superbar, #header, #sidebar, #subnav, .actions, .edit-tags, .feedback, .interaction-widget, .assignments, .boards, .rating, .status-form, .interaction-status, .task-list, .recruit-tabs .ui-tabs-nav {
+    display: none;
+  }
+  #container {
+    width: 100%;
+  }
+  #content {
+    width: 100%;
+    background: none;
+    border: none;
+  }
+  .person-header {
+    border: none;
+  }
+  .recruit-attributes {
+    width: 100%;
+    background: none;
+    border: none;
+  }
+  .recruit-details{
+    width: 100%;
+    div.tab {
+      width: 100%;
+      background: none;
+      border-top: solid 1px #000;
+      display: block !important;
+    }
+  }
+  a {
+    font-size: 12pt;
+    font-weight: normal;
+    text-decoration: none;
+  }
+  .tags {
+    li {
+      margin-right: 0;
+      float: none;
+    }
+  }
+}
+
+// Bubble Styles
+
+.bubble {
+  color: #000 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  .icon {
+    display: none;
+  }
+}
+
+.bubble-update, .bubble-delete {
+  display: none !important;
+}

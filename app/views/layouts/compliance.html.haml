@@ -1,0 +1,15 @@
+!!! 5
+%html
+  %head
+    = render :partial => 'layouts/head'
+    = csrf_meta_tag
+  %body.bp.two-col{:id => yield(:body_id)}
+    = render :partial => 'layouts/nav_compliance'
+    #container
+      = render :partial => "layouts/contacts_subnav" if controller.controller_name == 'account_coaches'
+      #content
+        = render :partial => "layouts/content"
+      #sidebar
+        = yield :sidebar
+    = render :partial => 'feedback/dialog'
+

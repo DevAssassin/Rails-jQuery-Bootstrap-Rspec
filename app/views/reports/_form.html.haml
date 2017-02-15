@@ -1,0 +1,12 @@
+= reports_form(@report) do |f|
+  = f.inputs do
+    = f.input :name
+    - if current_scope.is_a?(Account)
+      = f.input :interaction_scope, :required => true, :label => "Report on", :as => :select, :collection => grouped_options_for_select(interaction_scope_options, @report.interaction_scope), :include_blank => false
+    = f.input :interaction_type, :as => :select, :collection => ReportsController::INTERACTION_TYPES
+    = f.input :reported_user, :as => :select, :collection => current_scope.users, :include_blank => "All Users"
+    = f.input :start_date, :input_html => { :class => 'date_picker', :"style" => "width:200px !important" }
+    = f.input :end_date, :input_html => { :class => 'date_picker', :"style" => "width:200px !important" }
+  .submit-row
+    = submit_or_cancel :cancel => reports_path
+

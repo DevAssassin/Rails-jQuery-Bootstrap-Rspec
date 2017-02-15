@@ -1,0 +1,17 @@
+%div{:class => "actions textCenter"}
+  %ul.new_ul_actions
+    %li
+      %a{:href => edit_user_email_password_path, :class => "btn btn-success"}
+        Change Email or Password
+    %li
+      %a{:href =>  edit_program_path(current_program), :class => "btn btn-success"}
+        Edit Program Settings
+    %li
+      %a{:href => program_edit_form_path(current_program), :class => "btn btn-success"}
+        Customize Recruit Form
+    %li
+      %a{:href =>  users_path, :class => "btn btn-success"}
+        View Users
+    %li
+      %a{:href => users_invite_path, :class => "btn btn-success"}
+        Invite User

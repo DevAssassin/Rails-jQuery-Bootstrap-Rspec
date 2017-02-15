@@ -1,0 +1,48 @@
+table thead th.sortable-head {
+  background-color: #526e9f;
+  border-bottom: 1px solid black;
+  padding: 4px 10px 4px 5px;
+  color: #ffffff;
+  & a {
+    color: #fff;
+    &:visited {
+      color: #fff;
+    }
+  }
+}
+
+.dynatable-pagination-links {
+  float: right;
+  & a {
+    display: inline-block;
+    padding: 0 7px;
+    background: #eee;
+    border: solid 1px #ccc;
+    cursor: pointer;
+    &.dynatable-active-page {
+      cursor: default;
+      color: #ccc;
+      text-decoration: none;
+    }
+  }
+}
+
+.dynatable-search {
+  float: right;
+}
+
+.dynatable-processing {
+  background: transparent;
+  & span {
+    background: #526e9f;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    padding: 15px 50px;
+    border: solid 1px #fff;
+  }
+}
+
+.dynatable-per-page {
+  margin-right: 5px;
+}

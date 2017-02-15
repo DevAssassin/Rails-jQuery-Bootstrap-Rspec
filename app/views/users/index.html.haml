@@ -1,0 +1,44 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "icos_table"}
+            Account Users
+        = render :partial => 'users/sidebar'
+        %div{:class => "widget_content no-padding"}
+          %table#users-list{:class => "default_table","width" => "100%"}
+            %thead
+              %tr
+                %td Name
+                %td Email
+                - if current_scope.is_a?(Account)
+                  %td
+                    %span.account-name
+                      Account
+                    &amp;
+                    %span.program-name
+                      Program
+                    Access
+                %td Actions
+                %td Status
+            %tbody
+            - @users.each do |user|
+              %tr{:id => "user-row-#{user.id}"}
+                %td
+                  = user.name
+                %td
+                  = user.email
+                - if current_scope.is_a?(Account)
+                  %td= account_program_list(user).html_safe
+                %td
+                  - if current_scope.is_a?(Account)
+                    = account_program_invite_link(user).html_safe
+                  - else
+                    - unless user == current_user
+                      = link_to "Remove from program", user_path(user), :method => :delete, :confirm => "Are you sure you want to remove this user from your program?  You will have to re-invite them if you want to grant them access again."
+                %td
+                  = user.status
+                  - if user.status == :invited
+                    = link_to "Re-send invitation", resend_invitations_user_path(user), :method => :put, :confirm => "Are you sure you'd like to re-send invitations?"
+                    = link_to "Invitation link", user_invite_sign_up_url(:auth_token => user.authentication_token)

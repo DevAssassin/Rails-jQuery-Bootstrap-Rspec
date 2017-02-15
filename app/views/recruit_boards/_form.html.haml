@@ -1,0 +1,10 @@
+= form_for @recruit_board do |f|
+  -if @recruit_board.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@recruit_board.errors.count, "error")} prohibited this recruit_board from being saved:"
+      %ul
+        - @recruit_board.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

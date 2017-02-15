@@ -1,0 +1,45 @@
+html,body {
+  height: 100%;
+}
+body#print {
+  font-size: 12pt;
+  padding: 24pt;
+  background-color: #fff;
+  .print-all {
+    a.print {
+      line-height: 2em;
+    }
+    .person-onepage {
+      a.print { display: none; }
+    }
+  }
+  .person-onepage {
+    page-break-after: always;
+    hr { background-color: #000; height: 10pt; }
+    .header { width: 100%; height: 20pt; border-bottom: solid 1pt #000; margin-bottom: 1em; }
+    h1 { font-size: 14pt; font-weight: normal; width: 50%; float: left; }
+    h2 { font-size: 12pt; margin: 0; }
+    ul { list-style: none; margin: 0 0 1em 0; padding: 4pt; overflow: auto; }
+    li { font-size: 10pt; float: left; margin-right: 24pt; }
+    .label { font-weight: bold; }
+    dl { border: solid 1pt #ccc; padding: 4pt; }
+    dt, dd { float: left; width: 12.5% }
+    .date-printed { font-size: 14pt; width: 50%; float: right; text-align: right; }
+    .notes { font-size: 10pt; }
+  }
+  .people-table {
+    .person {
+      font-size: 10pt;
+      display: inline-block;
+      vertical-align: top;
+      margin: 0 20px 20px 0;
+      page-break-after: always;
+      page-break-inside: avoid;
+      max-width: 33%;
+      .name {
+        font-weight: bold;
+      }
+    }
+  }
+}
+

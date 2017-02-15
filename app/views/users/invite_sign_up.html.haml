@@ -1,0 +1,21 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "icos_table"}
+            Confirm your Details
+        %div{:class => "widget_content no-padding"}
+          = semantic_form_for(@user, :url => user_invite_sign_up_path) do |f|
+            = f.inputs do
+              = f.input :first_name
+              = f.input :last_name
+              %li
+                = f.label :Email
+                = @user.email
+              = f.input :password
+              = f.input :password_confirmation
+            = f.buttons do
+              .submit-row
+                = submit_or_cancel :cancel => user_invite_sign_up_path
+

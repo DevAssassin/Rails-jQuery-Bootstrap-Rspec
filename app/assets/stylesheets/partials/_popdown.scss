@@ -1,0 +1,53 @@
+body.bp {
+  dl.popdown {
+    @include inline-block;
+    vertical-align: baseline;
+
+    margin: 0;
+
+    dd, dt, ul {
+      margin: 0px;
+      padding: 0px;
+    }
+    dd {
+      position: relative;
+      white-space: nowrap;
+    }
+
+    dt {
+      button {
+        margin: 0;
+        &.active {
+          @include border-bottom-left-radius(0);
+          @include border-bottom-right-radius(0);
+        }
+      }
+      a {
+        @include unstyled-link;
+        background: none;
+        display: block;
+        padding: 5px 3px;
+      }
+    }
+
+    dd div.popdown-body {
+      display: none;
+      left: 0px;
+      top: 0px;
+      position: absolute;
+      z-index: 100;
+      padding: 3px;
+      background: #ddd;
+      @include box-shadow;
+
+      ul {
+        @include no-bullets;
+      }
+
+      &.active {
+        display: block;
+      }
+    }
+  }
+}
+

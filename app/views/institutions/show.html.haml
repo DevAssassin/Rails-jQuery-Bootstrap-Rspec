@@ -1,0 +1,65 @@
+.contents#institutions-details-page
+  .row-fluid
+    .span12
+      %div{:class => 'ico_16_elements content_header'}
+        %h3
+          = link_to_if @institution.website.present?, @institution.display_name, @institution.website, :target => "_blank"
+        %span.address
+          %p.street
+            = @institution.street
+          %p.city
+            = @institution.city
+          %p.state
+            = @institution.state
+          %p.country
+            = @institution.country
+          %p.post-code
+            = @institution.post_code
+          %p.phone-number
+            = @institution.phone_number
+        .actions.institute-actions
+          %ul
+            %li
+              %a.edit.btn{:href => edit_institution_path(@institution)} Edit
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          .institution-header
+            .institution-info                            
+              %dl.popdown
+                %dt
+                  %button.assign.btn.btn-primary Assign
+                %dd
+                  .popdown-body.assignment-form
+                    = semantic_form_for @institution, :url => update_coaches_institution_path(@institution), :method => :put do |f|
+                      = hidden_field_tag "coach_ids[]", '', :id => nil
+                      %ul
+                        - current_scope.users.each do |u|
+                          %li
+                            %label
+                              = check_box_tag "coach_ids[]", u.id, (@institution.user_ids || []).include?(u.id), :id => "assign_id_#{u.id}"
+                              = u.name
+                      = submit_or_cancel
+          %h2
+            Recruits
+          = render_cell :recruit, :list, :institution_id => @institution.id
+          
+          %h2
+            Coaches
+          = render_cell :institution_coach, :list, :coaches => @institution.coaches
+          
+          - if @institution.has_counselors?
+            %h2
+              Counselors
+            = render_cell :counselor, :list, :counselors => @institution.counselors
+          
+          %ul.sideBtn-section
+            %li.add-recruit
+              = link_to "Add Recruit", new_recruit_path(:institution => @institution.id), :class => 'btn btn-success'
+            %li.add-coach
+              = link_to "Add Coach", new_institution_coach_path(@institution), :class => 'btn btn-success'
+            - if @institution.has_counselors?
+              %li.add-counselor
+                = link_to "Add Counselor", new_institution_counselor_path(@institution), :class => 'btn btn-success'
+

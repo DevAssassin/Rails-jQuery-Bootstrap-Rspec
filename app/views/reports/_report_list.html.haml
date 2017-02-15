@@ -1,0 +1,22 @@
+- @reports.each do |report|
+  %tr
+    %td{:style => "display:none"}= report.user_id
+    %td= report.name
+    - if current_scope.is_a? Account
+      %td= report.interaction_scope_name
+    %td
+      = report.start_date
+      - if report.end_date.blank?
+        and after
+      - else
+        to
+        = report.end_date
+    %td= report.interaction_type
+    %td= report.updated_at
+    %td{:style => "display:none"}= report.updated_at.to_formatted_s(:js)
+    %td
+      = link_to 'CSV', report_path(report, :format => :csv)
+      = link_to 'PDF', report_path(report, :format => :pdf)
+      = link_to 'Edit', edit_report_path(report)
+      = link_to 'Delete', report_path(report), :confirm => 'Are you sure?', :method => :delete
+

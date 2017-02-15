@@ -1,0 +1,4 @@
+#form.preview
+  - @forms.each do |form|
+    .relavent-assignment.preview
+      = render_cell :form, :preview, :form => form

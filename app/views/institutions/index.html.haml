@@ -1,0 +1,20 @@
+.contents#contact-page-div
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Institutions List
+        %div{:class => "actions textCenter"}
+          %ul.new_ul_actions
+            %li
+              %a{:href =>  new_institution_path, :class=>"btn btn-success"}
+                Add High School
+            %li
+              %a{:href =>  new_college_path, :class=>"btn btn-success"}
+                Add College
+            %li
+              %a{:href =>  new_club_path, :class=>"btn btn-success"}
+                Add Club
+        %div{:class => "widget_content no-padding"}
+          = render_cell :institution, :list, :institutions => @institutions

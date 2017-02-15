@@ -1,0 +1,331 @@
+// This import applies a global reset to any page that imports this stylesheet.
+@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/base.sass file.
+@import "partials/base";
+@import "partials/variables";
+
+// Import all the default blueprint modules so that we can access their mixins.
+@import "blueprint";
+
+// Import the non-default scaffolding module.
+@import "blueprint/scaffolding";
+
+@import "compass/typography/lists/horizontal-list";
+@import "compass/typography/links/unstyled-link";
+@import "compass/typography/lists/bullets";
+@import "compass/css3/inline-block";
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+@import "compass/css3/box-shadow";
+@import "compass/css3/transform";
+
+// To generate css equivalent to the blueprint css but with your
+// configuration applied, uncomment:
+// @include blueprint
+
+// But Compass recommends that you scope your blueprint styles
+// So that you can better control what pages use blueprint
+// when stylesheets are concatenated together.
+@include blueprint-scaffolding;
+//
+
+body {
+  background-color: $page-bkgd;
+}
+
+body {
+  @include blueprint-typography(true);
+  @include blueprint-utilities;
+  @include blueprint-debug;
+  //@include blueprint-interaction;
+  // Remove the scaffolding when you're ready to start doing visual design.
+  // Or leave it in if you're happy with how blueprint looks out-of-the-box
+  .alertbox.feedback  { @include feedback-base;     }
+  .alertbox.error     { @include error(feedback);   }
+  .alertbox.alert     { @extend .error;             }
+  .alertbox.notice    { @include notice(feedback);  }
+  .alertbox.success   { @include success(feedback); }
+  .alertbox.info      { @include info(feedback);    }
+  .alertbox.hide      { display: none;              }
+  .alertbox.highlight { @include highlight;         }
+  .alertbox.added     { @include added;             }
+  .alertbox.removed   { @include removed;           }
+}
+
+@import "partials/iconic";
+@import "partials/buttons";
+@import "partials/completed_forms";
+@import "partials/stars";
+@import "partials/bubbles";
+@import "partials/custom_fields";
+@import "partials/data_tables";
+@import "partials/popdown";
+@import "partials/general";
+@import "partials/header";
+@import "partials/people";
+@import "partials/interactions";
+@import "partials/email";
+@import "partials/institutions";
+@import "partials/dashboard";
+@import "partials/boards";
+@import "partials/print";
+@import "partials/reports";
+@import "partials/tasks";
+@import "partials/superbar";
+@import "partials/tables";
+@import "partials/users";
+@import "partials/rules";
+@import "partials/notifications";
+
+form {
+  @include blueprint-form;
+  @include blueprint-inline-form;
+}
+@import "partials/forms";
+
+.ui-corner-all {
+  border-radius:0 !important;
+  -moz-border-radius:0 !important;
+}
+
+.ui-datepicker {
+  z-index: 9999 !important;
+}
+
+// Page layout can be done using mixins applied to your semantic classes and IDs:
+
+body {
+  #container {
+    @include container;
+    //@include showgrid;
+  }
+
+  #header {
+    h1 {
+      color: $header-text;
+      padding: 24px;
+      margin: 0px;
+      text-shadow: 2px 2px 2px #666666;
+    }
+    background-color: $header-bkgd;
+    color: $header-text;
+
+  }
+  #footer {
+    @include column($blueprint-grid-columns);
+  }
+}
+
+body.one-col {
+  #content {
+    padding-top:20px;
+    @include column($blueprint-grid-columns - 2, true);
+    @include prepend(1);
+    @include append(1);
+    padding-bottom:20px;
+    background-color: #fff;
+    background:#fff url(image-path("content_bkgd2.gif")) repeat-y top center;
+    border-bottom:1px solid $border;
+    //@include showgrid;
+  }
+}
+
+body.two-col {
+  #sidebar {
+    @include column($sidebar-columns, true);
+    padding-top:20px;
+    //@include showgrid;
+  }
+  #content {
+    padding-top:20px;
+    @include column($content-columns);
+    @include prepend(1);
+    @include append(1);
+    padding-bottom:20px;
+    background:#fff url(image-path("content_bkgd.gif")) repeat-y top center;
+    border-bottom:1px solid $border;
+    //@include showgrid;
+  }
+}
+
+ul#sitesections {
+  @include horizontal-list(false);
+  @include container;
+  padding-left:1px;
+
+  li {
+    height:30px;
+    line-height:30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 4px;
+    background-color: $header-tab-bkgd;
+    font-size: 130%;
+    &:hover {
+      background-color:$header-tab-hover;
+    }
+    a, span{padding:0 10px; display:block;}
+
+    &.current {
+      background-color: #fff;
+      color: black;
+    }
+
+    a {
+      @include unstyled-link;
+      cursor: pointer;
+      &:hover {background:none;}
+    }
+  }
+}
+
+#subnav {
+  @include column($content-columns + 2);
+  background-color: #fff;
+
+  ul {
+    @include horizontal-list(false);
+    border-left: 1px solid $border;
+    border-right: 1px solid $border;
+    border-bottom: 1px solid $border;
+
+    li {
+      height: 2em;
+      line-height: 2em;
+
+      a, span {
+        padding: 0 10px;
+        display: block;
+      }
+
+      &.current {
+        font-weight: bold;
+
+        a {
+          text-decoration: none;
+          color: black;
+          cursor: pointer;
+
+          &:hover {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+}
+
+#sidebar {
+  h2 {
+    margin:20px 0 5px 0;
+  }
+  ul.actions {
+    @include action-buttons;
+    li.add-recruit {
+      @include add-button;
+    }
+    li.invite-recruit {
+      @include invite-button;
+    }
+
+    // interactions on the recruits page
+    li.new-phone-call {
+      @include add-button;
+    }
+    li.new-letter {
+      @include add-button;
+    }
+    li.new-comment {
+      @include add-button;
+    }
+    li.new-visit {
+      @include add-button;
+    }
+    li.new-contact {
+      @include add-button;
+    }
+
+    li.add-institution {
+      @include add-button;
+    }
+
+    li.add-board {
+      @include add-button;
+    }
+
+    li.add-report {
+      @include add-button;
+    }
+
+  }
+  ul.editable {
+    list-style-type:none;
+    padding:0;
+
+    li {
+      position:relative;
+      z-index: 100;
+      line-height: 20px;
+      //width: 120px;
+
+      .show-row {
+        position:relative;
+        width: 120px;
+        &:hover {
+          left: -36px;
+          width: 156px;
+
+          .icons {
+            @include inline-block;
+          }
+        }
+      }
+
+      .edit-row, .new-row {
+        display:none;
+        position: relative;
+
+        input[type=text] {
+          width: 120px;
+        }
+      }
+    }
+
+    .tag-info, .board-info {
+      @include inline-block;
+      width: 120px;
+    }
+
+    .icons {
+      width: 36px;
+      height: 18px;
+      overflow: hidden;
+      @include inline-block;
+      display:none;
+      cursor: pointer;
+
+      .trash, .edit {
+        @include iconic;
+        font-size: 18px;
+
+        a {
+          @include unstyled-link;
+          &:hover {
+            background-color: inherit;
+          }
+        }
+      }
+    }
+  }
+}
+
+.printable-inline, .printable-block {
+  display: none;
+}
+
+.no-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

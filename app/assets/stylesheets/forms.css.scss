@@ -1,0 +1,99 @@
+/*
+ * This stylesheet is for styling questionnaire forms and NOT forms on the rest of the site. Use
+ * partials/_forms.scss if you want to style forms site-wide.
+ *
+ */
+
+// This import applies a global reset to any page that imports this stylesheet.
+@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/base.sass file.
+@import "partials/base";
+@import "partials/variables";
+
+// Import all the default blueprint modules so that we can access their mixins.
+@import "blueprint";
+
+// Import the non-default scaffolding module.
+@import "blueprint/scaffolding";
+
+@import "compass/typography/lists/horizontal-list";
+@import "compass/typography/links/unstyled-link";
+@import "compass/typography/lists/bullets";
+@import "compass/css3/inline-block";
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+@import "compass/css3/box-shadow";
+
+// To generate css equivalent to the blueprint css but with your
+// configuration applied, uncomment:
+// @include blueprint
+
+// But Compass recommends that you scope your blueprint styles
+// So that you can better control what pages use blueprint
+// when stylesheets are concatenated together.
+@include blueprint-scaffolding;
+
+body {
+  background-color: $page-bkgd;
+}
+
+body {
+  @include blueprint-typography(true);
+  @include blueprint-utilities;
+  @include blueprint-debug;
+  @include blueprint-interaction;
+  // Remove the scaffolding when you're ready to start doing visual design.
+  // Or leave it in if you're happy with how blueprint looks out-of-the-box
+}
+
+#form {
+  margin: 20px;
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      margin-top:10px;
+      p{margin:0;}
+    }
+  }
+  label {
+    display: block;
+  }
+  input[type="text"] {
+    width: 300px;
+  }
+}
+
+.relavent-completed-form {
+  opacity:0.6;
+  filter:alpha(opacity=60); /* For IE8 and earlier */
+}
+.relavent-assignment {
+  border-bottom: dashed red 1px;
+  margin-bottom: 5px;
+  &.preview:last-child {
+    border-bottom: none;
+  }
+}
+
+.preview-meta, .complete-meta {
+  display: block;
+  padding: 15px;
+  background: #fffedd;
+  border: solid 1px #ffed88;
+}
+
+.complete-meta {
+  opacity: 1.0;
+  filter:alpha(opacity=100);
+}
+
+#form-overlay {
+  font-size: 150px;
+  line-height: 150px;
+  color: rgba(0,0,0,.5);
+  text-align: center;
+}
+

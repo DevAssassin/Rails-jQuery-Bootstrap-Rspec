@@ -1,0 +1,11 @@
+- if notice
+  .alert.alert-success
+    = notice
+    %a.dismiss{href: '#'} dismiss
+- if alert
+  .alertbox.error= alert
+- notifications.each do |notification|
+  .alertbox.notice.notification{id: "notification-#{notification.id}"}
+    = notification.text
+    = link_to "dismiss", dismiss_notification_path(notification), :method => :delete, :class => 'dismiss', :remote => true
+= yield

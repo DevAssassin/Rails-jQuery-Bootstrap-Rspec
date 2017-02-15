@@ -1,0 +1,64 @@
+/*!
+ * jQuery UI Stars v3.0.1
+ * http://plugins.jquery.com/project/Star_Rating_widget
+ *
+ * Copyright (c) 2010 Marek "Orkan" Zajac (orkans@gmail.com)
+ * Dual licensed under the MIT and GPL licenses.
+ * http://docs.jquery.com/License
+ *
+ * $Rev: 164 $
+ * $Date:: 2010-05-01 #$
+ * $Build: 35 (2010-05-01)
+ *
+ */
+.ui-stars-star,
+.ui-stars-cancel {
+  float: left;
+  display: block;
+  overflow: hidden;
+  text-indent: -999em;
+  cursor: pointer;
+}
+.ui-stars-star a,
+.ui-stars-star span,
+.ui-stars-cancel a {
+  width: 16px;
+  height: 15px;
+  display: block;
+  background: url(image-path('jquery.ui.stars.gif')) no-repeat 0 0;
+}
+.ui-stars-star span{
+  cursor: default;
+}
+.ui-stars-star a,
+.ui-stars-star span {
+  background-position: 0 -32px;
+}
+.ui-stars-star-on a,
+.ui-stars-star-on span {
+  background-position: 0 -48px;
+  &:hover{background-color:transparent !important;}
+}
+.ui-stars-star-on.user,
+.user .ui-stars-star-on {
+  a, span {
+    background-position: 0 -64px;
+  }
+}
+.ui-stars-star-hover a {
+  background-position: 0 -64px;
+  background-color:transparent !important;
+}
+.ui-stars-cancel-hover a {
+  background-position: 0 -16px;
+  background-color:transparent !important;
+}
+.ui-stars-star-disabled,
+.ui-stars-star-disabled a,
+.ui-stars-cancel-disabled a {
+  cursor: default !important;
+  &:hover {
+    background-color:transparent !important;
+  }
+}
+

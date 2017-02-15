@@ -1,0 +1,9 @@
+/* Manifest file
+ *
+ *= require jwysiwyg/jquery.wysiwyg
+ *= require jwysiwyg/jquery.wysiwyg.modal
+ *= require chosen/chosen/chosen.css
+ *= require token-input-facebook
+ *= require jquery-ui-timepicker-addon
+ *= require_self
+*/

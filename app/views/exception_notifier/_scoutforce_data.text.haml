@@ -1,0 +1,17 @@
+- if data = @request.env['exception_notifier.exception_data']
+  - if data[:account] == data[:scope]
+    Account (Current Scope): #{data[:account].try(:name)}
+  - else
+    Account: #{data[:account].try(:name)}
+  Account Id: #{data[:account].try(:id)}
+  ='--'
+  - if data[:program] == data[:scope]
+    Program (Current Scope): #{data[:program].try(:name)}
+  - else
+    Program: #{data[:program].try(:name)}
+  Program Id: #{data[:program].try(:id)}
+  ='--'
+  User: #{data[:user].try(:name)}
+  User Id: #{data[:program].try(:id)}
+  User email: #{data[:user].try(:email)}
+

@@ -1,0 +1,12 @@
+%h1= @task.name
+%p Due: #{@task.due_at}
+
+%ol.task
+  - @task.forms.each do |form|
+    %li.form
+      #{form.name}:
+      - @task.assignments_by_form[form.id].map do |a|
+        - if a.completed?
+          = a.assignee.name
+        - else
+          = link_to a.assignee.name, form_complete_url(form, :auth_token => a.assignee.authentication_token, :task_id => @task.id)

@@ -1,0 +1,22 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "icos_pen"}
+            Invite User
+        = render :partial => 'users/sidebar'
+        %div{:class => "widget_content no-padding"}
+          = semantic_form_for @invitation, :url => users_invite_path do |f|
+            = f.inputs "Invite User" do
+              = f.input :user_id, :as => :hidden if @invitation.user_id
+              = f.input :recipient_first_name, :input_html => {:disabled => (true if @invitation.user_id)}
+              = f.input :recipient_last_name, :input_html => {:disabled => (true if @invitation.user_id)}
+              = f.input :recipient_email, :input_html => {:disabled => (true if @invitation.user_id)}
+              - if current_scope.is_a? Account
+                = f.input :recipient_account_level, :as => :boolean, :label => "Give this person account level access?"
+                = f.input :program_ids, :as => :check_boxes, :label => "Programs", :collection => current_scope.programs.collect{ |p| [p.name, p.id.to_s] }
+            = f.buttons do
+              .submit-row
+                = submit_or_cancel :submit => 'Send', :disable_with => 'Sending...', :cancel => edit_user_registration_path
+

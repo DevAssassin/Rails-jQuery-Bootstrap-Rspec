@@ -1,0 +1,16 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          New Recruit
+  .row-fluid
+    .span12
+      %div{:class => "widget_content no-padding"}
+        = semantic_form_for :person, :url => new_email_path(:invite => true), :html => {:method => :put} do |f|
+          = f.inputs do
+            = f.input :emails, :as => :text, :hint => "One email address per line, or comma-separated"
+          = f.buttons do
+            .submit-row
+              = submit_or_cancel :submit => 'Next Step &raquo;'.html_safe, :disable_with => 'Proceeding to next step...', :cancel => mass_new_people_path
+

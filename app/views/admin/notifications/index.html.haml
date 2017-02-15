@@ -1,0 +1,33 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Notifications
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table#notifications-list.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Text
+                %th Created
+                %th Updated
+                %th Actions
+            %tbody          
+              - @notifications.each do |notification|
+                %tr{:class => (notification.active? ? 'active' : 'inactive')}
+                  %td= link_to notification.text, [:admin, notification]
+                  %td= notification.created_at
+                  %td= notification.updated_at
+                  %td
+                    = link_to 'Edit', edit_admin_notification_path(notification)
+                    |
+                    = link_to 'Destroy', [:admin, notification], :confirm => 'Are you sure?', :method => :delete
+            
+            %ul.actions
+              %li.new_notification
+                = link_to 'New Notification', new_admin_notification_path, {:class => "btn btn-success"}

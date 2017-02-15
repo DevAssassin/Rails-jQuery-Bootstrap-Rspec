@@ -1,0 +1,32 @@
+- content_for :body_id, "rule-list"
+
+%h1
+  Phone Call Rules for
+  = @program.name
+
+%ul.rules
+  - @rules.each do |rule|
+    %li
+      .description
+        - if rule.school_class.present?
+          = rule.school_class
+          year
+        - if rule.transfer_type.present?
+          = rule.transfer_type
+          transfer
+        = rule.start_time
+        to
+        = succeed(':') do
+          = rule.end_time
+        = calls_remaining(rule.calls_allowed)
+        per
+        = rule.time_period
+      .actions
+        = link_to 'edit', edit_program_phone_call_rule_path(@program, rule)
+        \|
+        = link_to 'delete', program_phone_call_rule_path(@program, rule), :method => :delete, :confirm => "Are you sure you want to delete this rule?  This operation cannot be undone."
+
+
+%ul.actions
+  %li
+    = link_to "New Rule", new_program_phone_call_rule_path(@program)

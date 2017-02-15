@@ -1,0 +1,52 @@
+#superbar {
+  @include clearfix;
+  background-color: black;
+  color: #999;
+  font-size: 1.1em;
+  padding: 0 .5em;
+  #scope-switcher {
+    float: left;
+  }
+  #global-search-box {
+    display: inline;
+    margin-left: 1em;
+    form {
+      line-height: 32px;
+      display: inline;
+    }
+    input {
+      margin: 0;
+      padding: 2px 5px;
+      color: #fff;
+      border: solid 1px #333;
+      background-color: #333;
+      width: 300px;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  #accountbox {
+    float: right;
+    line-height: 32px;
+    a {
+      color: #999;
+      text-decoration: none;
+      padding: 3px 10px;
+      &:hover {
+        color: #fff;
+        background-color: #333 !important;
+      }
+    }
+    ul {
+      text-align: right;
+      @include no-bullets;
+      margin: 0;
+      padding: 0;
+      li {
+        display: inline;
+      }
+    }
+  }
+}
+

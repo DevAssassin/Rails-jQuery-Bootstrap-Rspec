@@ -1,0 +1,136 @@
+%div{:class => 'navigation '}
+  %ul
+    - if current_scope.is_a? Program
+      -if params[:controller] == "dashboard" && params[:action] == 'show'
+        %li{:class => "tip-right active"}
+          %a{:class => "i_dashboard", :href => root_path}
+            %span{:class => 'tab_label'}
+              Dashboard
+      -else
+        %li{:class => "tip-right "}
+          %a{:class => "i_dashboard", :href => root_path}
+            %span{:class => 'tab_label'}
+              Dashboard
+      -if (params[:controller] == "people" && ( params[:type] == "recruits" || params[:type] == "all" || params[:action] == "mass_new" || params[:type] == "recruit" )) || (params[:controller] == "emails" && params[:action] == "new" && params[:invite] == 'true' )
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_recruits tip-right", :href => recruits_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Recruits
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_recruits tip-right", :href => recruits_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Recruits
+      -if params[:controller] == "people" && (params[:type] == "coaches" || params[:type] == "rostered_players" || params[:type] == "staff" || params[:type] == "parents" || params[:type] == "alumni" || params[:type] == "donors" || params[:type] == "others")
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_contact tip-right", :href => coaches_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Contacts
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_contact tip-right", :href => coaches_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Contacts
+      -if params[:controller] == "recruit_boards"
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_recruits", :href => program_recruit_boards_path(current_scope)}
+            %span{:class => 'tab_label'}
+              Boards
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_recruits", :href => program_recruit_boards_path(current_scope)}
+            %span{:class => 'tab_label'}
+              Boards
+      - if current_account.compliance?
+        %li{:class => 'tip-right'}
+          %a{:class => "i_camper tip-right", :href => tasks_url }
+            %span{:class => 'tab_label'}
+              Tasks
+        %li{:class => 'tip-right'}
+          %a{:class => "i_camper tip-right", :href => form_groups_url }
+            %span{:class => 'tab_label'}
+              Forms
+      -if params[:controller] == "reports"
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_report tip-right", :href => reports_path }
+            %span{:class => 'tab_label'}
+              Reports
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_report tip-right", :href => reports_path }
+            %span{:class => 'tab_label'}
+              Reports
+      -if params[:controller] == "institutions"
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_camper tip-right", :href => institutions_path}
+            %span{:class => 'tab_label'}
+              Institutions
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_camper tip-right", :href => institutions_path}
+            %span{:class => 'tab_label'}
+              Institutions
+      -if params[:controller] == "tournaments"
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_event tip-right", :href => tournaments_path}
+            %span{:class => 'tab_label'}
+              Events
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_event tip-right", :href => tournaments_path}
+            %span{:class => 'tab_label'}
+              Events
+    - elsif current_scope.is_a? Account
+      -if params[:controller] == "dashboard"
+        %li{:class => "tip-right active"}
+          %a{:class => "i_dashboard", :href => root_path}
+            %span{:class => 'tab_label'}
+              Dashboard
+      -else
+        %li{:class => "tip-right "}
+          %a{:class => "i_dashboard", :href => root_path}
+            %span{:class => 'tab_label'}
+              Dashboard
+      -if (params[:controller] == "people" && ( params[:type] == "recruits" || params[:type] == "all" || params[:action] == "mass_new" || params[:type] == "recruit" )) || (params[:controller] == "emails" && params[:action] == "new" && params[:invite] == 'true' )
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_recruits tip-right", :href => recruits_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Recruits
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_recruits tip-right", :href => recruits_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Recruits
+      -if params[:controller] == "people" && (params[:type] == "coaches" || params[:type] == "rostered_players" || params[:type] == "staff" || params[:type] == "parents" || params[:type] == "alumni" || params[:type] == "donors" || params[:type] == "others")
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_contact tip-right", :href => coaches_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Contacts
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_contact tip-right", :href => coaches_path(:queries => default_person_query)}
+            %span{:class => 'tab_label'}
+              Contacts
+      %li{:class => 'tip-right'}
+        %a{:class => "i_camper tip-right", :href => tasks_url }
+          %span{:class => 'tab_label'}
+            Tasks
+      %li{:class => 'tip-right'}
+        %a{:class => "i_camper tip-right", :href => form_groups_url }
+          %span{:class => 'tab_label'}
+            Forms
+      -if params[:controller] == "reports"
+        %li{:class => 'tip-right active'}
+          %a{:class => "i_report tip-right", :href => reports_path }
+            %span{:class => 'tab_label'}
+              Reports
+      -else
+        %li{:class => 'tip-right'}
+          %a{:class => "i_report tip-right", :href => reports_path }
+            %span{:class => 'tab_label'}
+              Reports
+      - if current_account.rules_engine?
+        %li{:class => 'tip-right'}
+          %a{:class => "i_camper tip-right", :href => rules_path }
+            %span{:class => 'tab_label'}
+              Rules

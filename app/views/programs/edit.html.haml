@@ -1,0 +1,30 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Edit settings for
+          = @program.name
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        = render :partial => 'users/sidebar'
+        %div{:class => "widget_content no-padding"}
+          = semantic_form_for(@program) do |f|
+            = f.inputs "Program Settings" do
+              = f.input :name
+              = f.input :thank_you_message, :as => :text, :hint => "Message will be displayed after a recruit has filled out their online questionnaire form.", :input_html => { :class => current_user.editor }
+              %li
+                %p.inline-hints
+                  = link_to "Link to recruit questionnaire form", online_form_url(:program_id => @program.id)
+              = f.input :alumni_thank_you_message, :as => :text, :hint => "Message will be displayed after an alumnus has filled out the online questionnaire form.", :input_html => { :class => current_user.editor }
+              %li
+                %p.inline-hints
+                  = link_to "Link to alumnus questionnaire form", online_form_url(:program_id => @program.id, :type => 'Alumnus')
+              = f.input :notify_recruit_form_string, :as => :text, :label => "Notify email addresses", :hint => "Comma-separated list of email addresses to receive notification when someone fills out their online profile.", :input_html => {:value => @program.notify_recruit_form.join(', ') }
+            .submit-row
+              = submit_tag 'Save'
+              or
+              = link_to "Cancel", edit_user_registration_path, :class => "cancel"

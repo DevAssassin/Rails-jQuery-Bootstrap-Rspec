@@ -1,0 +1,10 @@
+- unless @alerts.blank?
+  %h2 Alerts
+  - @alerts.each do |alert|
+    .redalert
+      = alert.subject
+      .details
+        = link_to alert.caused_by.person.name, person_path(alert.caused_by.person) if alert.caused_by
+      - if current_user.accounts.include? current_account
+        = link_to '&#10006;'.html_safe, dismiss_interaction_path(alert), :class => 'dismiss', :method => :put, :remote => true
+

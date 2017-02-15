@@ -1,0 +1,37 @@
+!!! 5
+%html
+  %head
+    - if content_for?(:perPageCell)
+      = content_for :perPageCell
+    = render :partial => 'layouts/head'
+    = csrf_meta_tag
+  %body
+    -if current_user
+      = render :partial => 'layouts/nav'
+    -else
+      = render :partial => 'layouts/superbar'
+    = render :partial => 'layouts/topheaderbar' if current_user
+    - if current_user
+      .contentainer_wrapper
+        .container-fluid
+          .row-fluid
+            .span12
+              .wrapper
+                %h1{:class => 'textUpper', :style => "color: #fff; padding-bottom:5px;"}
+                  = current_scope ? current_scope.name : "ScoutForce"
+                = render :partial => "layouts/leftsidebar"
+                .content_wrapper
+                  = render :partial => "layouts/content"
+    - else
+      #container-fluid
+        - if content_for?(:subnav)
+          = content_for :subnav
+        #content
+          = render :partial => "layouts/content"
+        - if content_for?(:sidebar)
+          #sidebar
+            = content_for :sidebar
+    = render :partial => "layouts/footer"
+- if Rails.env.development?
+  = debug(params)
+  = debug(session)

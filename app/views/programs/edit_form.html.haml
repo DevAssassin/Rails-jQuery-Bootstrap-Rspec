@@ -1,0 +1,28 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Customize Recruit Form
+        %div{:class => "widget_content no-padding"}
+          .pad10
+            %p Uncheck fields to hide them in your online form, when adding or editing a recruit, and on a recruit's profile.
+          = semantic_form_for @program, :url => program_update_form_path, :method => :post, :html => { :class => 'customize-form' } do |f|
+            = hidden_field_tag 'program[visible_fields][]', '1-always-visible-field'
+            %ol.customize-form
+              - @fields.each do |field,label|
+                %li.hidden_field
+                  %label
+                    = check_box_tag 'program[visible_fields][]', field, !hidden_field?(field), :id => "toggle_#{field}", :title => 'Visible?'
+                    = label
+              = f.semantic_fields_for :custom_fields, Programs::CustomField.new, :child_index => '${index}' do |ef|
+                %script{:id => "eventTemplate", :type => "text/x-jquery-tmpl"}
+                  = render 'custom_field', { :form => ef, :li_class => 'new' }
+              = f.semantic_fields_for :custom_fields, @program.custom_fields.all do |ef|
+                = render 'custom_field', :form => ef
+              %li.add-item
+                %label
+                = link_to 'Add a field', '#', :id => 'add_link'
+            .submit-row.ml0.pad10
+              = submit_or_cancel

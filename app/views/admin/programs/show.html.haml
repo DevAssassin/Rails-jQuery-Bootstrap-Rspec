@@ -1,0 +1,24 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          = @program.name
+          = @program.sport_class_name
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content"}
+          = link_to 'Edit', edit_admin_account_program_path(@program.account, @program)
+          \|
+          = link_to 'Analytics Dashboard', admin_account_program_stats_path(@program.account)
+          \|
+          = link_to 'Email templates', admin_account_program_email_templates_path(@program.account, @program)
+          \|
+          = link_to 'Users', admin_account_program_users_path(@program.account, @program)
+          |
+          = link_to 'Invite Users', invite_admin_account_program_users_path(@program.account, @program)
+          \|
+          = link_to 'Back to account', admin_account_path(@program.account)

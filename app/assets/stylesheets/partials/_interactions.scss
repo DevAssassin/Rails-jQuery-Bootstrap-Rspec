@@ -1,0 +1,233 @@
+/*==========STYLES FOR INTERACTION INLINE FORM==========*/
+
+.interaction-widget {
+  @include column(20, true);
+}
+
+.interaction-form{
+  display: none;
+  &.new, &.edit {background-color:$highlight; margin-bottom:10px;}
+  form {
+    line-height:1;
+    legend {
+      span {
+        display:inline-block;
+        position:relative;
+        top:15px;
+      }
+    }
+    .place-call-button {
+      display: none;
+      margin-top: 10px !important;
+      text-align: right;
+    }
+  }
+  fieldset.inputs {
+    padding:20px 10px 0px 10px !important;
+    margin:0;
+    position:relative;
+    top:-6px;
+    ol {
+      fieldset legend.label {
+        width:100%;
+        label {
+          width:100%;
+          text-align:left;
+          margin:10px 0 2px 0;
+        }
+      }
+      fieldset ol {
+        float:left;
+        width:100%;
+      }
+      li {
+        background:none;
+        border:none;
+        margin:0;
+        label {
+          text-align:left;
+          margin:10px 0 2px 0;
+          width:100% !important;
+          font-weight:normal;
+          color:#636363;
+          font-size:13px;
+        }
+        input[type=text], textarea {
+          width:350px;
+          margin:0;
+        }
+      }
+    }
+  }
+
+  fieldset.buttons {
+    padding:0 0 10px 10px;
+    ol  {
+      li {
+        border:none;
+        padding:0;
+        margin:0;
+        display:inline-block;
+        }
+    }
+  }
+  .unvalidated {
+    padding: 20px 10px 10px 10px;
+    position: relative;
+    top: -6px;
+    h3 {
+      font-size: 15px;
+      font-weight: bold;
+    }
+  }
+}
+
+/*==========STYLES FOR INTERACTION HISTORY ITEMS==========*/
+
+.interaction-widget .interaction:hover .meta a {
+  visibility: visible;
+}
+
+.interaction-widget .interaction .name {
+  display: none;
+}
+
+ul.interactions {
+  list-style-type:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  @include column(20);
+
+  li {
+    @include clearfix;
+    border-top:1px solid $border;
+    padding: 5px 0;
+
+    .interaction {
+      @include clearfix;
+
+      .meta {
+        text-align: center;
+        @include column(5);
+
+        .type {
+          display:block;
+          padding:2px;
+          background-color:#000000;
+          color:#fff;
+          font-weight:bold;
+          font-size: 12px;
+          @include border-radius(2px);
+        }
+
+        .status {
+          display:block;
+          padding:2px;
+          margin: 0 3px;
+          background-color:#fff;
+          border:1px solid #bababa;
+          color:#000;
+          /*font-weight:bold;*/
+          font-size: 11px;
+          @include border-bottom-radius(2px);
+        }
+
+        a {
+          visibility: hidden;
+        }
+      }
+    }
+
+    &:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .details {
+      @include column(15, true);
+
+      .name {
+        font-size: 120%;
+      }
+
+      .summary {
+        font-size: 120%;
+        @include clearfix;
+      }
+
+      .body {
+        p:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .info {
+        font-size:80%;
+        font-style:italic;
+        color:#636363;
+      }
+    }
+
+    .interaction.email {
+      .type {
+        background-color:#C79810;
+      }
+    }
+
+    .interaction.letter {
+      .type {
+        background-color:#008C00;
+      }
+    }
+
+    .interaction.comment {
+      .type {
+        background-color:#6bba70;
+      }
+    }
+
+    .interaction.phone-call {
+      .type {
+        background-color:#3F4C6B;
+      }
+    }
+
+    .interaction.visit {
+      .type {
+        background-color:#4096EE;
+      }
+    }
+
+    .interaction.contact {
+      .type {
+        background-color:#FF7400;
+      }
+    }
+
+    .interaction.creation {
+        background:url(image-path('icons/1.png')) no-repeat center right;
+    }
+
+    .interaction.rating {
+      .type {
+        background-color:#CC0000;
+      }
+      .arrow, .old-rating, .new-rating {
+        @include inline-block;
+      }
+    }
+
+    .interaction.sms {
+      .type {
+        background-color: #731CBA;
+      }
+    }
+
+    .interaction.donation {
+      .type {
+        background-color: #B52367;
+      }
+    }
+  }
+}
+

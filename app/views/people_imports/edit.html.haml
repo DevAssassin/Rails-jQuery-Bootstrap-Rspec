@@ -1,0 +1,32 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'content_header'}
+        %h3
+          Review Import
+        %span Note: You must import at least a <strong>first name</strong>, a <strong>last name</strong>, and an <strong>email</strong> for the import to be processed successfully.
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          = semantic_form_for @import do |f|
+            = f.inputs do
+              %table.default_table{:"width" => '100%'}
+                %thead
+                  %tr
+                    %th{:style => "width: 15%"} Column Name{}
+                    - if @import.sample_values
+                      %th Sample Value
+                    %th{:style => "width: 33%"} Action
+                %tbody
+                  - @import.columns.each_with_index do |column,index|
+                    %tr.column
+                      %td= column
+                      - if @import.sample_values
+                        %td= @import.sample_values[index]
+                      %td= select_tag "people_import[actions][#{index}]", grouped_options_for_select(import_options(@import))
+            .submit-row
+              = submit_or_cancel :cancel => new_people_import_path
+

@@ -1,0 +1,110 @@
+#task-filter {
+  float: right;
+}
+
+.task-list fieldset {
+  border: none;
+}
+
+.task-list .checkall {
+  margin: 5px 11px 0 0;
+}
+
+.task-list .task {
+
+  input.task-checkbox {
+    clear: left;
+    float: left;
+    vertical-align: bottom;
+    margin: 5px 0 0;
+  }
+
+  .task-item {
+    padding-left: 20px;
+    display: block;
+  }
+
+}
+
+.task-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.task-list .tasks {
+  padding: 10px 0;
+  border-top: solid 1px #ddd;
+  margin: 10px 0 0;
+}
+
+.task-list li {
+  line-height: 22px;
+}
+
+.task img {
+  position: relative;
+  top: 3px;
+}
+
+.task-deadline, .task-assignee {
+  background: #eee;
+  padding: 1px 7px;
+  font-size: 0.9em;
+  margin: 0 0 0 3px;
+  @include rounded(1em);
+}
+
+.task-info {
+  cursor: pointer;
+}
+
+.task-arrow {
+  visibility: hidden;
+}
+.task-arrow.visible, .task-item:hover .task-arrow {
+  visibility: visible;
+}
+
+.task.completed .task-item, .assignee-name.completed {
+  text-decoration: line-through;
+  color: rgba(0,0,0,0.5);
+}
+
+.task.past-due .task-deadline {
+  background: #ffb3b3;
+}
+
+.task.due-soon .task-deadline {
+  background: #fbff85;
+}
+
+.task-drawer {
+  color: #333;
+  display: none;
+  margin-left: 35px;
+}
+
+.task-actions {
+  margin: 5px 0 10px;
+}
+
+.tasks-widget {
+  @include column(20, true);
+}
+
+.add-task {
+  float: right;
+}
+
+#new_task {
+
+  ul.token-input-list-facebook {
+    margin-bottom: 0;
+  }
+
+}
+
+#person-completed-tasks-link {
+  float: right;
+  margin-top: 5px;
+}

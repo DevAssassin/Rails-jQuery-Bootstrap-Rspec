@@ -1,0 +1,12 @@
+= form_form(@form) do |f|
+  = f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text
+    = f.input :html, :as => :text
+  = f.inputs do
+    = f.input :eligible_for_standalone, :as => :boolean, :label => "Allowed to be assigned as a standalone form"
+    = f.input :eligible_for_groups, :as => :boolean, :label => "Allowed to be assigned as part of a form group"
+  = f.buttons do
+    = submit_or_cancel :cancel => forms_path
+
+

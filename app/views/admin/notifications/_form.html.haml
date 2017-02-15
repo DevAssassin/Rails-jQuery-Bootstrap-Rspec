@@ -1,0 +1,6 @@
+= semantic_form_for [:admin, @notification] do |f|
+  = f.inputs do
+    = f.input :active, as: :boolean
+    = f.input :text, as: :text
+  .submit-row
+    = submit_or_cancel :cancel => admin_notifications_path

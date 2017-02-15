@@ -1,0 +1,34 @@
+-#.highligts_content
+  .container-fluid
+    .stats
+      .row-fluid
+        .span12
+          .statistics
+            %ul{:class => 'quickstats' }
+              %li{:class => 'noBackground inner-logo'}
+                %a{:class => "p0", :href => "#"}
+                  = image_tag("logo-inner.png", :class => 'floatLeft')
+                  %strong
+                    ScoutForce
+                    %label{:class => 'textUpper'}
+                      = current_scope ? current_scope.name : "ScoutForce"
+              %li{:class => 'blue gradient'}
+                %a{:href => recruits_path(:queries => default_person_query)}
+                  = image_tag(request.protocol + request.host_with_port + "/assets/icons/black/glyphicons_043_group.png")
+                  %span
+                    Recruits
+              %li{:class => 'red gradient'}
+                %a{:href => my_camps_path}
+                  = image_tag("/assets/icons/black/glyphicons_223_thin_up_arrow.png")
+                  %span
+                    My Camps
+              %li{:class => 'aqua gradient'}
+                %a{:href => reports_path}
+                  = image_tag("/assets/icons/black/glyphicons_041_charts.png")
+                  %span
+                    Reports
+              %li{:class => 'yellow gradient'}
+                %a{:href => search_profile_path}
+                  = image_tag("/assets/icons/black/glyphicons_390_facebook.png")
+                  %span
+                    Search Profile

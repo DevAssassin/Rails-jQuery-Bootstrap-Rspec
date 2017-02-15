@@ -1,0 +1,17 @@
+%h1 Edit Form Template
+
+= semantic_form_for @template, :url => update_form_template_path, :html => {:multipart => true} do |f|
+  = f.inputs "Form Template" do
+    - @template.assets.each_with_index do |asset, i|
+      %li.file.optional
+        = f.fields_for :assets, asset do |a|
+          %label
+            Asset
+            = i + 1
+          = a.file_field :asset
+          = image_tag(asset.asset.thumb.url) if asset.asset?
+    = f.input :styles, :as => :text
+    = f.input :html, :as => :text, :hint => "You should use {{{content}}} where you want the form and {{asset_1}}, {{asset_2}}, etc. where you want the URLs for the assets you uploaded"
+  = f.buttons do
+    = submit_or_cancel :cancel => forms_path
+

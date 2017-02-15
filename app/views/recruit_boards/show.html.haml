@@ -1,0 +1,57 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            = @recruit_board.name
+          %span{:"style" => "float: left;padding-left: 20px;line-height:40px"}= link_to 'Click for printable view', print_program_recruit_board_path(@recruit_board)
+        %div{:class => "widget_content no-padding", :id => "recruit-board"}         
+          #sidebar
+            %ul.actions
+              %li.add-board
+                %a{:class => "btn btn-success btn-large"}
+                  + Add Board
+            .board-settings
+              = form_for :board, :remote => true, :url => update_default_program_recruit_board_path(current_program, @recruit_board), :html => { :method => :put, :class => 'set-default-recruit-board' }  do
+                - if current_user.recruit_board == @recruit_board
+                  = check_box_tag :make_default, '1', true, :disabled => true
+                  Make Default
+                - else
+                  = check_box_tag :make_default, '1', false
+                  %label{:for => :make_default} Make Default
+              -#= form_for :board, :remote => true, :url => toggle_dashboard_program_recruit_board_path(current_program, @recruit_board), :html => { :method => :put, :class => 'toggle-dashboard-recruit-board' } do
+                -#= check_box_tag :toggle_dashboard, '1', current_user.recruit_boards.include?(@recruit_board)
+                -#%label{:for => :toggle_dashboard} Show on Dashboard
+            %h2 Boards
+            %ul.boards.editable
+              %li
+                .new-row
+                  = form_for RecruitBoard.new(:name => "New Recruit Board"), :url => program_recruit_boards_url(current_program) do |f|
+                    = f.text_field :name
+                    = submit_tag "Save", :class => "btn btn-primary"
+                    or
+                    %a.cancel{:href => '#'} Cancel
+              - @recruit_boards.each do |board|
+                %li
+                  .show-row
+                    .icons
+                      %span.trash
+                        = link_to "t", program_recruit_board_path(current_program, board), :method => :delete, :confirm => "Are you sure you want to permanently delete this recruit board?  This operation cannot be undone."
+                      %span.edit
+                        %a{:href => "#"} p
+                    .board-info<>
+                      = link_to board.name, program_recruit_board_path(current_program, board)
+                  .edit-row
+                    = form_for board, :url => program_recruit_board_url(current_program, board) do |f|
+                      = f.text_field :name
+                      = submit_tag "Save", :class => "btn btn-primary"
+                      or
+                      %a.cancel{:href => '#'} Cancel
+          #sidebar-left-sec        
+            %ul.recruit-board-list{"data-url" => sort_program_recruit_board_path }
+              - @recruit_board.recruits.each_with_index do |recruit, index|
+                = render_cell :recruit, :board_row, :recruit => recruit, :index => index + 1
+          .clear
+
+          

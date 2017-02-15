@@ -1,0 +1,44 @@
+.completed-forms-header
+  .actions
+    %ul
+      %li= link_to 'Print', '#', :id => 'print-completed-form'
+      - if current_user.can_destroy?(CompletedForm)
+        %li
+          = link_to "Delete", form_group_completed_form_url(params[:form_group_id], params[:form_group_thread_id]), :method => :delete,
+            :confirm => "Are you sure you want to delete these completed forms? The associated task assignments will be re-marked incomplete."
+#form
+  %h1
+    = @task.form_group.name
+  %p
+    %em
+      (assigned via #{@task.name} task)
+
+  %p
+    = form_tag form_group_completed_form_url(params[:form_group_id], params[:form_group_thread_id]), :method => :put, :class => 'formtastic' do |f|
+      = hidden_field_tag 'reviewed', @reviewed ? 0 : 1
+      - if @reviewed
+        %p<>
+          This form has been
+          %strong reviewed
+          - if @reviewed_by.present?
+            by #{@reviewed_by.name}
+          %span> .
+        = submit_tag 'Mark as unreviewed'
+      - elsif @reviewed_by.present?
+        %p
+          This form has been marked
+          %strong not reviewed
+          by #{@reviewed_by.name}
+        = submit_tag 'Mark as reviewed'
+      - else
+        %p This form has not yet been reviewed.
+        = submit_tag 'Mark as reviewed'
+
+
+  %iframe{:src => preview_form_group_completed_forms_url(params[:form_group_id], params[:form_group_thread_id]), :width => "100%", :height => "600px", :id => 'preview'}
+    %p
+      Your browser does not support iframes. Please visit
+      = link_to preview_form_group_completed_forms_url(params[:form_group_id], params[:form_group_thread_id])
+      to preview your completed forms.
+
+

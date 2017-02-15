@@ -1,0 +1,22 @@
+.contents  
+  .row-fluid
+    .span12
+      .register-page
+        .widget_wrapper
+          .widget_header
+            %h3{:class => 'i_contact'}
+              Signup for #{@registration_plans.plan.titleize} Plan
+          %div{:class => "widget_content no-padding"}
+            = semantic_form_for @sign_up, :url => registration_payment_path do |f|
+              = f.inputs do
+                -#= devise_error_messages!
+                = f.input :first_name
+                = f.input :last_name
+                = f.input :email
+                = f.input :password
+                = f.input :password_confirmation
+                = f.buttons do
+                  .submit-row
+                    = submit_or_cancel :cancel => root_path
+            = render :partial => "devise/shared/links"
+

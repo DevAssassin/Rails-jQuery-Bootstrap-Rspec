@@ -1,0 +1,13 @@
+.row-fluid
+  .span12
+    .login{:id => 'forgot_password_form' }
+      .textCenter
+      =image_tag("logo.png", :alt => "scoutforce")
+      %h2 Forgot your password?
+      = semantic_form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+        = f.inputs do
+          = f.input :email, :placeholder => "Email" 
+        = f.buttons do
+          = f.submit :value => 'Send me reset password instructions', :disable_with => 'Sending...', :class => "btn btn-info span12"
+      = render :partial => "devise/shared/links"
+

@@ -1,0 +1,6 @@
+%h1
+  Completed Forms
+%p
+  For #{@scope.class.name.titleize}: #{@scope.name}
+
+= render_cell :completed_form, :list, :completed_forms => @completed_forms, :scope => @scope

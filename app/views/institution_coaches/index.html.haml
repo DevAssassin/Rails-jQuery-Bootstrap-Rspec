@@ -1,0 +1,24 @@
+.contents#contact-page-div
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Listing coaches
+        %div{:class => "actions textCenter"}
+          %ul.new_ul_actions
+            %li
+              %a{:href =>  new_coach_path, :class=>"btn btn-success"}
+                New Coach
+        %div{:class => "widget_content no-padding"}
+          %table
+            %tr
+              %th
+              %th
+              %th
+          
+            - @coaches.each do |coach|
+              %tr
+                %td= link_to 'Show', coach
+                %td= link_to 'Edit', edit_coach_path(coach)
+                %td= link_to 'Destroy', coach, :confirm => 'Are you sure?', :method => :delete

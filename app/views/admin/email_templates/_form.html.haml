@@ -1,0 +1,26 @@
+- if current_program.present?
+  - form_array = [:admin, current_account, current_program, @email_template]
+- else
+  - form_array = [:admin, current_account, @email_template]
+= semantic_form_for form_array, :html => {:multipart => true} do |f|
+  = f.inputs "Email Template" do
+    = f.input :name
+    %li.file.optional
+      %label Thumbnail
+      = f.file_field :thumbnail
+      = image_tag(@email_template.thumbnail_url) if @email_template.thumbnail?
+    - @email_template.assets.each_with_index do |asset, i|
+      %li.file.optional
+        = f.fields_for :assets, asset do |a|
+          %label
+            Asset
+            = i + 1
+          = a.file_field :asset
+          = image_tag(asset.asset.thumb.url) if asset.asset?
+    = f.input :source, :as => :text, :hint => "You should use {{{content}}} where you want the body of the email (including attachment links) and {{asset_1}}, {{asset_2}}, etc. where you want the URLs for the assets you uploaded"
+  = f.buttons do
+    .submit-row
+      - if current_program.present?
+        = submit_or_cancel :cancel => admin_account_program_email_templates_path(current_account, current_program)
+      - else
+        = submit_or_cancel :cancel => admin_account_email_templates_path(current_account)

@@ -1,0 +1,11 @@
+= semantic_form_for @tournament do |f|
+  = f.inputs do
+    = f.input :name
+    = f.input :city
+    = f.input :state, :as => :select, :collection => options_from_collection_for_select(states(@tournament.country), "name", "name", @tournament.state), :include_blank => true, :input_html => { :class => 'state' }
+    = f.input :country, :as => :select, :collection => countries, :include_blank => true, :input_html => { :class => 'country' }
+    = f.input :begin_date, :input_html => { :class => 'datetime_picker', :style => "width: 200px !important;" }
+    = f.input :end_date, :input_html => { :class => 'datetime_picker', :style => "width: 200px !important;" }
+    = f.input :comment, :as => :text
+  .submit-row
+    = submit_or_cancel :cancel => tournaments_path

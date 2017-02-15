@@ -1,0 +1,11 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3
+            New admin_user
+        %div{:class => "widget_content contents"}
+          = render 'form'
+          
+          = link_to 'Back', admin_users_path

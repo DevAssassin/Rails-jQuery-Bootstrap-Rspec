@@ -1,0 +1,6 @@
+%h1 Choose Program
+%p Please choose a program for the new recruit from the list below:
+%ul
+  - current_account.programs.each do |program|
+    %li
+      = link_to program.name, new_recruit_path(:program_id => program.id)

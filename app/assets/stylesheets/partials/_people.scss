@@ -1,0 +1,323 @@
+body#person-show {
+  .interaction-status {
+    @include column(20, true);
+  }
+}
+
+.recruit-details, .coach-details, .coach-activity, .person-details { @include column(18); }
+
+.recruit-tabs {
+  @include clearfix;
+
+  &.ui-tabs {
+    padding:0;
+    position:relative;
+    border:none;
+    ul.ui-tabs-nav {
+      width:100%;
+      background-color:#fff;
+      li {
+        margin-right:5px;
+        a {
+          font-size:14px;
+          font-weight:bold;
+          &:hover {
+            color:#fff;
+            background:none;
+          }
+        }
+        &.ui-state-active a:hover {
+          color:#000000;
+        }
+      }
+    }
+
+    .tab {padding:0; background:none; border:none;}
+  }
+
+  div.tab {
+  }
+}
+
+.alert-activity {
+  display: inline;
+  float: left;
+  width: 390px;
+  .redalert {
+    margin-bottom: 1.5em;
+  }
+}
+
+.dashboard-alerts {
+  .redalert {
+    margin-bottom: 1.5em;
+  }
+}
+
+dl.recruit-attributes, dl.coach-attributes, dl.person-attributes {
+  float:left;
+  @include clearfix;
+  @include column(18);
+  border-top:1px solid #808080;
+  border-bottom:1px solid #808080;
+  background:#EDF5FF url(image-path('recruit_tabs_bkgd.gif')) repeat-y top center;
+  line-height:1.1em;
+  margin:0;
+  padding-top:10px;
+  dt {
+    margin:0;
+    padding:4px 0;
+    @include column(8);
+    float: left;
+    clear: both;
+    text-align: right;
+    color:#636363;
+    font-weight:normal;
+    font-size:12px;
+    &:after {
+      content: ":";
+    }
+  }
+  dd {
+    margin:0 2px 0 0;
+    padding:4px 0;
+    float:left;
+    @include column(10, true);
+    font-size:13px;
+    color:#000000;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: bold;
+    float: left;
+    text-align: center;
+    @include column(16);
+    margin: 5px 0;
+  }
+  .notes p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.recruit-actions {
+  @include clearfix;
+  dl {
+    float:left;
+    @include clearfix;
+    width:100%;
+    padding:10px 0 6px 0;
+    line-height:1.1em;
+    margin: 0;
+    dt {
+      margin:0;
+      width:120px;
+      float: left;
+      clear: both;
+      text-align: right;
+      padding:0 0 5px 5px;
+      color:#636363;
+      font-weight:normal;
+      font-size:12px;
+    }
+    dd {
+      margin:0 0 0 10px;
+      float:left;
+      width:210px;
+      padding:0 5px 6px 0;
+      font-size:13px;
+      color:#000000;
+      ul {
+        @include no-bullets;
+        padding: 0;
+        margin: 0;
+      }
+
+      form {
+        line-height: 1;
+        select, input {
+          margin-top:0;
+          margin-bottom:0;
+        }
+      }
+    }
+  }
+}
+
+.person-header {
+  @include pie-clearfix;
+
+  //.clearfix { clear: both; }
+
+  border-bottom:1px solid $border;
+  margin-bottom: 10px;
+
+  .actions ul {
+    @include horizontal-list;
+    float:right;
+  }
+
+  .photo {
+    @include column(6);
+    margin-bottom: 10px;
+  }
+
+  .person-info {
+    @include column(32, true);
+    margin-bottom: 10px;
+
+    h1 {
+      display:inline;
+      clear:both;
+    }
+
+    .rating {
+      @include pie-clearfix;
+      .stars {
+
+      }
+
+      form {
+
+      }
+    }
+
+    .conversion-form {
+      display:none;
+    }
+
+    .tags {
+      @include clearfix;
+
+      ul {
+        @include horizontal-list(false);
+        display:inline;
+
+
+        li {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .tags-form {
+      display:none;
+    }
+
+    .status-form {
+      display: inline;
+
+
+      form {
+        display:inline;
+      }
+    }
+
+    div.assignments, div.boards {
+      display: inline;
+      line-height: 2;
+    }
+  }
+}
+
+.person-list-widget {
+  .action {
+    display: none;
+
+    .loader { visibility: hidden; }
+  }
+  .action.loading .loader { visibility: visible; }
+
+  #table-filter, #mass-actions, #tag-filter {  }
+
+  .dataTables_filter, #table-filter-inline, #tag-filter-inline  {
+    @include inline-block;
+    width: auto;
+    float: none;
+    margin: 5px 5px 5px 0;
+
+    input[type=text] {
+      width: 100px;
+    }
+  }
+
+  #person-list {
+    td.rating { padding: 0; }
+  }
+
+  #search-wrapper{
+    overflow:hidden;
+  }
+
+  #mass-actions{
+    margin:14px 0;
+  }
+
+  #mass-actions-inline {
+    margin-bottom: 5px;
+  }
+  #searchbox, #table-filter, #tag-filter-inline {
+    float:left;
+    margin:0 5px 0 0;
+  }
+  #searchbox input{
+    width:150px;
+  }
+  #user_filter {
+    width: 150px;
+  }
+
+  fieldset {
+    border: 0 none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.compact-recruit-list {
+
+}
+
+form.person {
+  li.event {
+    input {
+      width: 100px;
+    }
+    select {
+      width: 120px;
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+#user_edit {
+  .cell-phone {
+    line-height: 28px;
+  }
+}
+
+#verified {
+  margin-left: 5px;
+  color: #138F15;
+}
+
+#unverified {
+  margin-left: 5px;
+  color: #c00;
+}
+
+.children {
+  .child {
+    padding-left: 309px;
+  }
+}
+
+.redalert.refresh-needed {
+  display: none;
+}
+
+h1.success {
+  color: #2a0;
+}

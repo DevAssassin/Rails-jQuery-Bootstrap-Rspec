@@ -1,0 +1,15 @@
+!!! 5
+%html
+  %head
+    = stylesheet_link_tag 'forms', :media => 'screen, projection, print'
+    = javascript_include_tag 'form_complete'
+    - if @template
+      :css
+        #{@template.render_styles}
+    = csrf_meta_tag
+  %body.bp{:id => yield(:body_id)}
+    - if @template
+      = raw @template.render(yield)
+    - else
+      = yield
+

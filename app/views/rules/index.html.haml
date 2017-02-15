@@ -1,0 +1,17 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Choose Program
+            %p Please choose a program to view/edit rules:
+        %div{:class => "widget_content no-padding", :id => "recruit-board"}         
+          %ul.rules
+            - @programs.each do |program|
+              %li{:"style" => "clear:both"}
+                .description{:"style" => "padding-left: 20px;padding-top: 10px;"}= program.name
+                .actions
+                  = link_to pluralize(program.phone_call_rules.count,"phone call rule"), program_phone_call_rules_path(program)
+                  \|
+                  = link_to pluralize(program.recruiting_calendar_items.count,"calendar item"), program_recruiting_calendar_items_path(program)

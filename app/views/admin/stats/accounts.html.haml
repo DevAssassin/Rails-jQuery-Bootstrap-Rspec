@@ -1,0 +1,25 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Account Level Analytics
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Account
+                %th SMS Messages Sent
+                %th ScoutForce SMS Usage
+            %tbody
+              - @stats.each do |s|
+                %tr
+                  %td= link_to s[:account].name, admin_account_path(s[:account]) if s[:account]
+                  %td= link_to pluralize(s[:count],'SMS','SMSs'), admin_account_program_stats_path(s[:account])
+                  %td= number_to_percentage (100 * (s[:count] / @total.to_f)), :precision => 2
+

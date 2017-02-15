@@ -1,0 +1,6 @@
+.completed-forms-header {
+  .actions ul {
+    @include horizontal-list;
+    float:right;
+  }
+}

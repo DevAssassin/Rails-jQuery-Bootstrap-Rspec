@@ -1,0 +1,11 @@
+#subnav
+  = tabs_tag :builder => TabBuilder, :namespace => :subnav do |tab|
+    = tab.all "All", all_people_path(:queries => default_person_query) #TODO change this to just people_path
+    = tab.recruits "Recruits", recruits_path(:queries => default_person_query)
+    = tab.roster "Roster", rostered_players_path(:queries => default_person_query)
+    = tab.coaches "Coaches", coaches_path(:queries => default_person_query)
+    = tab.staff "Staff", staff_path(:queries => default_person_query)
+    = tab.parents "Parents", parents_path(:queries => default_person_query)
+    = tab.alumni "Alumni", alumni_path(:queries => default_person_query)
+    = tab.donor "Donor", donors_path(:queries => default_person_query)
+    = tab.other "Other", others_path(:queries => default_person_query)

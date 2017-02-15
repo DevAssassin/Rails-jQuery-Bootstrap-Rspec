@@ -1,0 +1,28 @@
+.contents#tournament-show-page
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Events
+        = render(:partial => 'subnav')
+        %div{:class => "widget_content"}  
+          .tournament-header
+            .tournament-info
+              .actions
+                %ul
+                  %li
+                    %a.edit{:href => edit_tournament_path(@tournament)} Edit
+                  %li
+                    = link_to 'Delete', @tournament, :confirm => 'Are you sure?', :method => :delete
+                  %li
+                    = link_to "View All", tournaments_path
+                  
+              %h1= @tournament.name
+              %h3.location  
+                #{@tournament.city}, #{@tournament.state}
+              .eventdate
+                #{@tournament.begin_date} - #{@tournament.end_date}
+              
+              %p.comments= @tournament.comment
+          = render_cell :recruit, :list, :tournament_id => @tournament.id

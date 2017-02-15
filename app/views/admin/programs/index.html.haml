@@ -1,0 +1,31 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Listing Programs for
+          = current_account.name
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Name
+                %th
+                %th
+                %th
+            %tbody
+              - @programs.each do |program|
+                %tr
+                  %td= program.name
+                  %td= link_to 'Show', admin_account_program_path(current_account, program)
+                  %td= link_to 'Edit', edit_admin_account_program_path(current_account, program)
+                  %td= link_to 'Destroy', admin_account_program_path(current_account, program), :confirm => 'Are you sure?', :method => :delete
+          
+          %br
+          
+          = link_to 'New Program', new_admin_account_program_path

@@ -1,0 +1,25 @@
+body#rule-list, body#calendar-item-list {
+  ul.rules, ul.calendar-items {
+    @include no-bullets;
+    margin: 0;
+    padding: 0;
+
+    li {
+      border: 1px solid $border;
+      @include border-radius(2px);
+      padding: 5px;
+      margin: 0 0 3px 0;
+      @include clearfix;
+
+      .description {
+        float: left;
+        font-size: 120%;
+      }
+
+      .actions {
+        float: right;
+      }
+    }
+  }
+}
+

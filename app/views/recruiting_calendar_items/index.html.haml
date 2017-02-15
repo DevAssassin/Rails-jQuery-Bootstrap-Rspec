@@ -1,0 +1,24 @@
+- content_for :body_id, "calendar-item-list"
+
+%h1
+  Recruiting Calendar Items for
+  = @program.name
+
+%ul.calendar-items
+  - @items.each do |item|
+    %li
+      .description
+        = item.message_type == "alert" ? "Alert" : "Notice"
+        = item.start_time
+        to
+        = item.end_time
+      .actions
+        = link_to 'edit', edit_program_recruiting_calendar_item_path(@program, item)
+        \|
+        = link_to 'delete', program_recruiting_calendar_item_path(@program, item), :method => :delete, :confirm => "Are you sure you want to delete this calendar item?  This operation cannot be undone."
+
+- content_for :sidebar do
+  %ul.actions
+    %li
+      = link_to "New Item", new_program_recruiting_calendar_item_path(@program)
+

@@ -1,0 +1,35 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Events
+        = render(:partial => 'subnav')
+        %div{:class => "widget_content no-padding"}         
+          #sidebar
+            %ul.side-actions
+              %li.add-task
+                = link_to "Add Event", new_tournament_path,:class => "btn btn-success btn-large"
+          #sidebar-left-sec        
+            %table#tournament-list.default_table{:"width" => "100%"}
+              %thead
+                %tr
+                  %th Name
+                  %th City
+                  %th State
+                  %th{:'data-dynatable-sorts' => 'sortable_begin_date'} Start Date
+                  %th{:'data-dynatable-column' => 'sortable_begin_date', :style => 'display: none;'}
+                  %th{:'data-dynatable-sorts' => 'sortable_end_date'} End Date
+                  %th{:'data-dynatable-column' => 'sortable_end_date', :style => 'display: none;'}
+              %tbody{:id => "tournament-list-tbody"}
+                - @tournaments.each do |tournament|
+                  %tr{:id => "tournament-row-#{tournament.id}"}
+                    %td= link_to tournament.name, tournament_path(tournament)
+                    %td= tournament.city
+                    %td= tournament.state
+                    %td= tournament.begin_date
+                    %td= tournament.begin_date.to_formatted_s(:js)
+                    %td= tournament.end_date
+                    %td= tournament.end_date.to_formatted_s(:js)
+          .clear

@@ -1,0 +1,7 @@
+.header_wrapper
+  .globalmsg
+    - if m = global_message
+      %div{:class => (m.alert? ? "redalert" : "bluenotice")}= m.message
+  .container-fluid
+    .row-fluid
+      =link_to image_tag("logo.png", :border => 0), '', {:class => 'logo mr10'}

@@ -1,0 +1,49 @@
+%ul.actions
+  - if current_user.superuser?
+    = render 'shared/forms_superuser_subnav'
+.contents#contact-page-div
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Form groups List
+        %div{:class => "widget_content no-padding"}
+          .form-group-list-widget
+            %table{:class => "default_table",:width => "100%",'id' => 'form-group-list'}
+              %thead
+                %tr
+                  %th.name{:'data-dynatable-column' => 'name'} Form
+                  - if current_scope.is_a? Account
+                    %th.pending Pending
+                  - else
+                    %th.description Description
+                  %th.completed{:'data-dynatable-sorts' => 'sortable_completed'} Completed
+                  %th.assign{:'data-dynatable-no-sort' => 'true'}
+              %tbody{:id => "report-list-tbody"}
+                - @form_groups.each do |form_group|
+                  %tr{:'data-record-id' => form_group.id}
+                    %td
+                      = link_to form_group.name, form_group_path(form_group)
+                    - if current_scope.is_a? Account
+                      %td
+                        = form_group.pending_form_count.last || '0'
+                    - else
+                      %td
+                        = simple_format(truncate(form_group.description, :length => 100))
+                    %td
+                      - if form_group.public?
+                        = link_to form_completed_forms_path(form_group.forms.first) do
+                          - if current_scope.is_a? Program
+                            = form_group.forms.first.completed_forms.where(:program_id => current_program.id).count || 0
+                          - else
+                            = form_group.forms.first.completed_forms.count || 0
+                      - else
+                        = link_to form_group.completed_form_count.last || '0', form_group_completed_forms_path(form_group)
+                    %td
+                      = link_to "Assign Form", new_task_path(:task => {:form_group => form_group})
+                      - if form_group.public?
+                        = link_to "Public Link", form_complete_url(form_group.forms.first, :scope_id => current_scope.id), :target => :blank
+                    - if form_group.original.present?
+                      %td
+                        = link_to 'Print (PDF)', form_group.original.url

@@ -1,0 +1,145 @@
+form.email, form.mass_sms {
+  line-height: 24px;
+
+  #email_body {
+    width: 720px;
+    height: 500px;
+  }
+
+  fieldset.inputs ol li label {
+    width: 150px;
+  }
+
+  fieldset.inputs ol li.boolean label {
+    width: 750px;
+    margin: 3px 0;
+  }
+
+  .event+.removeEvent {
+    float: right;
+    margin: -28px 20px 0 0;
+  }
+
+  span {
+    line-height: 30px;
+  }
+
+  .recipients .token-input-list-facebook {
+    width: 730px;
+  }
+
+  ul.recipients {
+    @include no-bullets;
+    @include clearfix;
+    padding: 0;
+    border: none;
+    margin: 3px 0px;
+
+    li {
+      border:none;
+    }
+  }
+}
+
+@mixin email-template {
+  ul.attachments {
+    @include no-bullets;
+    padding-left: 10px;
+    margin: 1.5em 0 0;
+
+    li {
+      @include clearfix;
+    }
+
+    .icon {
+      @include iconic;
+      font-size: 32px;
+      line-height: 32px;
+      float: left;
+      width: 32px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    p.size {
+      font-size: 80%;
+      color: #666;
+    }
+  }
+}
+
+.email-thread {
+  .email {
+    .meta {
+      h2 {
+        font-size: 150%;
+        margin: 0 0 .2em;
+      }
+      p {
+        margin:0;
+        line-height: 140%;
+      }
+      .label {
+        color: #666;
+        margin-right: 0.5em;
+      }
+
+      border-bottom: 1px solid $border;
+      padding-bottom: 3px;
+      margin-bottom: 1em;
+    }
+    .contents {
+      .body {
+        //@include nested-reset;
+        @include email-template;
+      }
+    }
+  }
+}
+
+body#scoutforce-email {
+  @include email-template;
+}
+
+div.wysiwyg {
+  @include inline-block;
+  margin: 5px 0px;
+}
+
+.delete-email {
+  float: right;
+}
+
+.events {
+  margin-top: 2em;
+  h3 {
+    font-size: 1.25em;
+  }
+  h4 {
+    font-size: 1em;
+    margin: 0;
+    .event-type {
+      font-weight: bold;
+    }
+    .event-time {
+      font-weight: normal;
+    }
+  }
+  li {
+    margin-bottom: 1em;
+  }
+}
+
+.email-preview {
+  margin: 20px;
+  width: 830px;
+  .body, iframe#preview {
+    width: 830px;
+    overflow: auto;
+    margin: 10px 0;
+    padding: 10px;
+    border: solid 1px #dfdfdf;
+  }
+}

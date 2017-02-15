@@ -1,0 +1,3 @@
+- content_for(:body_id) { 'online-form' }
+= render_cell :person, :online_form_header, :person => @person
+= render_cell :person, :online_form, :program => @program, :person => @person

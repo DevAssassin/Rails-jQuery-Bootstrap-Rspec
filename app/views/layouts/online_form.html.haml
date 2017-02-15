@@ -1,0 +1,57 @@
+!!! 5
+%html
+  %head
+    - if content_for?(:perPageCell)
+      = content_for :perPageCell
+    = render :partial => 'layouts/head'
+    = csrf_meta_tag
+  %body#online_form_body
+    -if current_user
+      = render :partial => 'layouts/nav'
+    = render :partial => 'layouts/topheaderbar' if current_user    
+    - if current_user
+      .contentainer_wrapper
+        .container-fluid
+          .row-fluid
+            .span12
+              .wrapper
+                = render :partial => "layouts/leftsidebar"
+                .content_wrapper
+                  .contents
+                    .row-fluid
+                      .span6
+                        %div{:class => 'content_header'}
+                          %h1
+                            = @program.name
+                    .separator
+                      %span
+                    .row-fluid
+                      .span12
+                        .widget_wrapper
+                          %div{:class => "widget_content no-padding"}
+                            = render :partial => "layouts/content"
+    - else
+      .contentainer_wrapper
+        .container-fluid
+          .row-fluid
+            .span12
+              .wrapper
+                .content_wrapper
+                  .contents
+                    .row-fluid
+                      .span6
+                        %div{:class => 'content_header'}
+                          %h1
+                            = @program.name
+                    .separator
+                      %span
+                    .row-fluid
+                      .span12
+                        .widget_wrapper
+                          %div{:class => "widget_content no-padding"}
+                            = render :partial => "layouts/content"
+    = render :partial => "layouts/footer"
+- if Rails.env.development?
+  = debug(params)
+  = debug(session)
+

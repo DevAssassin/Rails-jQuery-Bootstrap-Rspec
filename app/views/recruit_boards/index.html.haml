@@ -1,0 +1,17 @@
+%h1 Listing recruit_boards
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @recruit_boards.each do |recruit_board|
+    %tr
+      %td= link_to 'Show', recruit_board
+      %td= link_to 'Edit', edit_recruit_board_path(recruit_board)
+      %td= link_to 'Destroy', recruit_board, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Recruit board', new_recruit_board_path

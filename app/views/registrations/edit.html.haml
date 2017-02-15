@@ -1,0 +1,41 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Edit your user account
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "icos_pen"}
+            Edit your user account
+        = render :partial => 'users/sidebar'
+        %div{:class => "widget_content no-padding"}
+          = semantic_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+            = f.inputs :name => "General" do
+              = f.input :first_name
+              = f.input :last_name
+              = f.input :email_from, :hint => "your name in the from field"
+              = f.input :email_signature, :as => :text, :hint => "it is appended to every mail you send", :input_html => { :class => current_user.editor }
+              %li
+                = f.label :cell_phone, :class => "label"
+                = f.text_field :cell_phone, :class => ("hidden" if !resource.cell_phone.blank?)
+                .cell-phone{:class => ("hidden" if resource.cell_phone.blank?)}
+                  %span.number{:title => "Click to edit"}= resource.cell_phone
+                  = link_to "Edit", "#", :id => "edit-cell-phone"
+                  - if resource.cell_phone_verified?
+                    %span#verified
+                      &#10004;&nbsp;Verified
+                      = link_to "Click to reset Caller ID", users_unverify_cell_path
+                  - else
+                    %span#unverified
+                      &#10006;&nbsp;Unverified
+                      = link_to " (Click to verify)", users_verify_cell_path
+              = f.input :time_zone, :as => :time_zone, :priority_zones => ActiveSupport::TimeZone.us_zones
+              = f.input :default_scope, :collection => grouped_options_for_select(scope_options, "#{resource.default_scope.class.to_s}|#{resource.default_scope.id}")
+              = f.input :default_only_my_contacts, :as => :boolean
+            .submit-row
+              = submit_or_cancel :cancel => root_path

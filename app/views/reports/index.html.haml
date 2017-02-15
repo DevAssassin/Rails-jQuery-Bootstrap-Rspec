@@ -1,0 +1,34 @@
+.contents
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Reports List
+        %div{:class => "actions textCenter"}
+          %ul
+            %li
+              %a{:href =>  new_report_path, :class=> "btn btn-success", "style" => "color:#000;"}
+                Add Report
+        %div{:class => "widget_content no-padding"}
+          .report-list-widget
+            .searh-all-reports
+              %label.show-label
+                Show:
+              %form{:name => "report-list"}
+                %fieldset.report-list-header
+                  = report_user_filter_pulldown
+            %table{:class => "default_table dynamicTable_two",:width => "100%",'id' => 'report-list'}
+              %thead
+                %tr
+                  %th{:'data-dynatable-column' => 'user_filter', :style => 'display: none;'}
+                  %th Name
+                  - if current_scope.is_a? Account
+                    %th.interaction_scope Report on
+                  %th Date Range
+                  %th Interaction Type
+                  %th{:'data-dynatable-sorts' => 'sortable_updated_at'} Last Updated
+                  %th{:'data-dynatable-column' => 'sortable_updated_at', :style => 'display: none;'}
+          
+              %tbody{:id => "report-list-tbody"}
+                = render "report_list"

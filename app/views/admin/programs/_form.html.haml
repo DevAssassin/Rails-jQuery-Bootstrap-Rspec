@@ -1,0 +1,8 @@
+= semantic_form_for [:admin, current_account, @program] do |f|
+  = f.inputs do
+    = f.input :name
+    = f.input :sport_class_name, :collection => SignUp::SUPPORTED_SPORTS
+  = f.buttons do
+    .submit-row
+      = submit_or_cancel :cancel => admin_account_path(current_account)
+

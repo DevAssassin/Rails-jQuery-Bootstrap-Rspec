@@ -1,0 +1,43 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Listing Accounts
+        %span
+          = link_to 'View Analytics Dashboard for all accounts', admin_account_stats_path
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            Listing Accounts
+        %div{:class => "widget_content no-padding"}
+          %table.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Account Name
+                %th Number of Programs
+                %th Number of Account-level users
+                %th Number of Total Users
+                %th Last Activity Date
+                %th Free
+                %th Actions
+            %tbody
+              - @accounts.each do |account|
+                %tr
+                  %td= link_to account.name, [:admin, account]
+                  %td= account.programs.size
+                  %td= account.users.size
+                  %td= link_to account.associated_users.size, admin_account_users_path(account)
+                  %td= account.activity_at
+                  %td= account.free
+                  %td
+                    = link_to 'Edit', edit_admin_account_path(account)
+                    \|
+                    = link_to "Access", change_scope_path(:scope => "Account|#{account.id}")
+
+      = link_to 'New Account', new_admin_account_path
+

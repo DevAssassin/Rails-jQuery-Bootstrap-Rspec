@@ -1,0 +1,12 @@
+= coach_form(@institution, @coach) do |f|
+  = f.inputs do
+    = f.input :first_name
+    = f.input :last_name
+    = f.input :office_phone
+    = f.input :home_phone
+    = f.input :cell_phone
+    = f.input :email
+  = f.buttons do
+    .submit-row
+      = submit_or_cancel :cancel => institution_path(@institution)
+

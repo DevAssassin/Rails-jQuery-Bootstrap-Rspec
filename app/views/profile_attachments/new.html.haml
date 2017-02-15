@@ -1,0 +1,15 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => 'i_contact'}
+            Profile Attachment for #{link_to @person.name, person_path(@person)}
+        %div{:class => "widget_content contents"}
+          = semantic_form_for @profile_attachment do |f|
+            = hidden_field_tag :person_id, @person.id
+            = f.inputs do
+              = f.input :attachment, :as => :file
+            = f.buttons do
+              .submit-row
+                = f.submit 'Upload Attachment'

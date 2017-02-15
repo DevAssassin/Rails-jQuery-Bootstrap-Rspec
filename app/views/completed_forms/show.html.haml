@@ -1,0 +1,39 @@
+.completed-forms-header
+  - if current_user.can_destroy?(@completed_form)
+    .actions
+      %ul
+        %li= link_to 'Print', '#', :id => 'print-completed-form'
+        %li
+          = link_to "Delete", form_completed_form_url(params[:form_id], @completed_form.id), :method => :delete,
+            :confirm => "Are you sure you want to delete this completed form? It cannot be recovered."
+#form
+  %h1
+    = @completed_form.form.name
+
+= semantic_form_for [@completed_form.form, @completed_form] do |f|
+  = f.inputs do
+    = f.input :reviewed, :as => :hidden, :input_html => { :value => @completed_form.reviewed? ? 0 : 1 }
+  = f.buttons do
+    - if @completed_form.reviewed?
+      %p<>
+        This form has been
+        %strong reviewed
+        - if @completed_form.reviewed_by.present?
+          by #{@completed_form.reviewed_by.name}
+        %span> .
+      = f.submit 'Mark as unreviewed'
+    - elsif @completed_form.reviewed_by.present?
+      %p
+        This form has been marked
+        %strong not reviewed
+        by #{@completed_form.reviewed_by.name}
+      = f.submit 'Mark as reviewed'
+    - else
+      %p This form has not yet been reviewed.
+      = f.submit 'Mark as reviewed'
+
+%iframe{:src => preview_form_completed_form_url(params[:form_id], params[:id]), :width => "100%", :height => "600px", :id => 'preview'}
+  %p
+    Your browser does not support iframes. Please visit
+    = link_to preview_form_completed_form_url(params[:form_id], params[:id])
+    to preview your completed forms.

@@ -1,0 +1,51 @@
+#recruit-board {
+
+  ul.recruit-board-list {
+    @include no-bullets;
+    margin: 0;
+    padding: 0;
+    min-height: 100px;
+
+    li {
+      margin: 0 0 5px;
+      padding: 0;
+      border: 1px solid $border;
+
+      table {
+        margin: 0;
+
+        td.rank {
+          width: 30px;
+          text-align: center;
+          vertical-align: middle;
+        }
+
+        td.thumbnail {
+          width: 100px;
+        }
+
+        td.actions {
+          width: 200px;
+          text-align: right;
+        }
+
+        td.info {
+
+        }
+      }
+    }
+  }
+
+  ul.ui-sortable {
+
+    .board-row {
+      cursor: pointer;
+    }
+
+  }
+
+  form.set-default-recruit-board {
+    display: inline;
+  }
+}
+

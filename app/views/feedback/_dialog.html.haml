@@ -1,0 +1,18 @@
+.feedback
+  .button Feedback
+  .dialog
+    = semantic_form_for Feedback.new, :url => feedback_path, :remote => true do |f|
+      = f.inputs do
+        = f.input :url, :as => :hidden, :input_html => {:value => request.fullpath}
+        = f.input :text, :as => :text, :label => "Please describe your problem, suggestion or comment below."
+        - unless current_user
+          = f.input :email, :hint => "Note: We will be unable to respond to your feedback if no email address is entered."
+      - unless current_user
+        .alertbox.notice= "Your feedback will be sent to ScoutForce. If you wish to send a message to a coach, you need to contact the coach directly."
+        .impthing
+          %span
+            = label_tag :sfhnpt, 'Important: if you aren\'t a computer, do not fill out this field!'
+            = text_area_tag :sfhnpt
+      = f.buttons do
+        = submit_or_cancel :submit => 'Send Feedback', :disable_with => 'Sending...'
+

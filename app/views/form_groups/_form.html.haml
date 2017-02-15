@@ -1,0 +1,28 @@
+= form_group_form(@form_group) do |f|
+  = f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text
+    - if @form_group.original?
+      %li
+        %label
+        = f.check_box :remove_original
+        Remove #{@form_group.original.file.original_filename}
+    - else
+      = f.input :original, :as => :file, :label => 'Printable PDF Form'
+    - if current_user.superuser?
+      / Manually list checkboxes out so we can more easily make them sortable
+      /= f.input :forms, :as => :check_boxes, :collection => current_scope.forms
+      %li.check_boxes.required#form_group_forms_input
+        %fieldset
+          %legend.label
+            %label Forms
+          %ol
+            %li
+              %ul.sortable#form-checkboxes
+                - @forms.each do |form|
+                  %li{:id => "form-group-form-#{form.id}"}
+                    %label{:for => "form_group_form_ids_#{form.id.to_s}"}
+                      = check_box_tag 'form_group[form_ids][]', form.id.to_s, nil, :id => "form_group_form_ids-#{form.id}", :checked => (@form_group.form_ids.include?(form.id))
+                      = form.name
+  = submit_or_cancel :cancel => form_groups_path
+

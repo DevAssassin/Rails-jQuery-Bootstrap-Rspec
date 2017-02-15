@@ -1,0 +1,49 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Users
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table#users-list.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Identity
+                %th Accounts
+                %th Programs
+                %th Actions
+            %tbody
+              - @users.each do |user|
+                %tr{:id => "user-row-#{user.id}"}
+                  %td
+                    = "#{user}: #{user.email}"
+                  %td
+                    - user.accounts.each do |account|
+                      %p
+                        = "#{account.name}: "
+                        = link_to "View", [:admin, account]
+                        |
+                        = link_to "Remove", [:admin, account, user], :method => :delete, :confirm => "Are you sure you want to remove this user from this account?  You will have to re-invite them if you want to grant them access again."
+                  %td
+                    - user.programs.each do |program|
+                      %p
+                        = "#{program.name}: "
+                        = link_to "View", [:admin, program.account, program]
+                        |
+                        = link_to "Remove", [:admin, program.account, program, user], :method => :delete, :confirm => "Are you sure you want to remove this user from this program?  You will have to re-invite them if you want to grant them access again."
+                  %td
+                    = link_to "Sign in as #{user}", become_admin_user_path(user), :method => :post
+                    |
+                    = link_to "Edit", edit_admin_user_path(user)
+                    |
+                    = link_to "Reset password", reset_password_admin_user_path(user), :method => :put
+                    |
+                    = user.status
+                    - if user.status == :invited
+                      = link_to "Re-send invitation", resend_invitations_admin_user_path(user), :method => :put, :confirm => "Are you sure you'd like to re-send invitations?"
+                      = link_to "Invitation link", user_invite_sign_up_url(:auth_token => user.authentication_token)

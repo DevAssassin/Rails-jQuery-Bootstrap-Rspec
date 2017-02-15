@@ -1,0 +1,13 @@
+!!! 5
+%html
+  %head
+    = render :partial => 'layouts/head'
+    = csrf_meta_tag
+  %body.bp{:id => yield(:body_id), :class => 'one-col'}
+    #header
+      %h1= current_scope ? current_scope.name : "ScoutForce"
+    #container
+      #content
+        = render :partial => "layouts/content"
+    = render :partial => 'feedback/dialog'
+

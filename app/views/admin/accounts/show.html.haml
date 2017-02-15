@@ -1,0 +1,49 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          = @account.name
+        %span
+          = link_to "View Analytics Dashboard for #{@account.name} programs", admin_account_program_stats_path(@account)
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Program Name
+                %th Sport
+                %th Number of Users
+                %th Last contact update
+                %th Last interaction update
+                %th Actions
+            %tbody
+              - @account.programs.each do |program|
+                %tr
+                  %td= link_to program.name, [:admin, @account, program]
+                  %td= program.sport_class_name
+                  %td= link_to program.users.count, admin_account_program_users_path(@account, program)
+                  %td= program.last_contact_update
+                  %td= program.last_interaction_update
+                  %td
+                    = link_to 'Edit', edit_admin_account_program_path(@account, program)
+                    \|
+                    = link_to "Access", change_scope_path(:scope => "Program|#{program.id}")
+        %div{:class => "widget_content"}          
+          = link_to 'New Program', new_admin_account_program_path(@account)
+          \|
+          = link_to 'Edit', edit_admin_account_path(@account)
+          \|
+          = link_to 'Analytics Dashboard', admin_account_stats_path
+          \|
+          = link_to 'Email templates', admin_account_email_templates_path(@account)
+          \|
+          = link_to 'Users', admin_account_users_path(@account)
+          |
+          = link_to 'Invite Users', invite_admin_account_users_path(@account)
+          \|
+          = link_to 'Back', admin_accounts_path

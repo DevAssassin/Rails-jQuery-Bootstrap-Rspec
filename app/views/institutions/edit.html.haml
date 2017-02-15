@@ -1,0 +1,10 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => 'i_contact'}
+            Editing institution
+        %div{:class => "widget_content  no-padding"}
+          = render_cell :institution, :form, :institution => @institution
+

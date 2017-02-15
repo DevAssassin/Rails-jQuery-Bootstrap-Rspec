@@ -1,0 +1,13 @@
+= semantic_form_for [@program, @rule] do |f|
+  = f.inputs do
+    = f.input :school_class, :collection => %w{Freshman Sophomore Junior Senior}, :hint => "School class will be ignored for transfer students"
+    = f.input :transfer_type, :collection => ['Prep', 'Two Year', 'Four Year']
+    = f.input :start_time, :input_html => { :class => 'datetime_picker' }, :hint => "In your current time zone: #{Time.zone}"
+    = f.input :end_time, :input_html => { :class => 'datetime_picker' }, :hint => "In your current time zone: #{Time.zone}"
+
+    = f.input :calls_allowed, :hint => "Input '-1' for unlimited"
+    = f.input :time_period, :collection => %w{day week month period}
+    = f.input :message, :as => :text
+  = f.buttons do
+    = submit_or_cancel :cancel => program_phone_call_rules_path(@program)
+

@@ -1,0 +1,6 @@
+- content_for :sidebar do
+  %ul.actions
+    - if current_user.superuser?
+      = render 'shared/forms_superuser_subnav'
+= render_cell :form, :list, :forms => @forms, :public => controller.action_name == 'public'
+

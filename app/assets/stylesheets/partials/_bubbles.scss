@@ -1,0 +1,111 @@
+body.bp .bubbles {
+  display: block;
+  height: auto;
+  clear: both;
+  position: relative;
+  margin-top: 6px;
+  .bubble {
+    float: left;
+    overflow: hidden;
+    height: 24px;
+    margin: 0 6px 6px 0;
+    &.deletable a {
+      padding-right: 24px;
+    }
+    &.status>:first-child {
+      background-color: #f60;
+    }
+    &>* {
+      display: block;
+      float: left;
+      height: 24px;
+      line-height: 24px;
+      background-color: #6C8BAA;
+      color: #fff;
+      margin-bottom: 6px;
+      padding: 0 6px;
+    }
+    &>:first-child {
+      @include border-left-radius(3px);
+    }
+    &>:last-child {
+      @include border-right-radius(3px);
+    }
+    input[type="text"] {
+      background-color: #eee;
+      border: none;
+      margin: 0;
+      width: 100px;
+      display: inline-block;
+      &:focus {
+        outline: none;
+        background-color: #f6f6f6;
+      }
+    }
+    a, a:visited {
+      position: relative;
+      background-color: #369;
+      text-decoration: none;
+      &:hover {
+        background-color: #1E3B59;
+      }
+      .delete {
+        position: absolute;
+        right: 2px;
+        top: 2px;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        @include border-radius(3px);
+        &:hover {
+          background-color: #eef;
+          color: #000;
+        }
+      }
+    }
+    abbr {
+      border: none;
+    }
+  }
+  .bubble-section {
+    display: inline-block;
+    margin-right: 20px;
+    &>.bubble:first-child span {
+      font-weight: bold;
+      background-color: #fff;
+      color: #000;
+    }
+  }
+}
+
+.bubble-form {
+  display: none;
+  background-color: #fff;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  margin-left: -150px;
+  padding: 10px;
+  border: solid 1px #ddd;
+  z-index: 1002;
+  input[type="text"], select {
+    width: 260px;
+    margin-bottom: .5em;
+  }
+}
+
+.bubble-overlay {
+  background: rgba(0,0,0,.1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+}
+
+.chzn-container a:hover {
+  color: #000 !important;
+}

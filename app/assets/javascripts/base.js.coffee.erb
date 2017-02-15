@@ -1,0 +1,1093 @@
+window.ScoutForce = {}
+
+ipad = navigator.userAgent.match(/iPad/i) != null
+
+(->
+
+  ppPage = 25;
+  if pPage? then ppPage = pPage
+
+  $.dynatableSetup(
+    table:
+      defaultColumnIdStyle: 'underscore'
+      headRowClass: 'sortable-head'
+    inputs:
+      perPagePlacement: 'after'
+    dataset:
+      ajaxCache: false
+      perPage: ppPage
+      perPageOptions: [25, 50, 100, 250, 500]
+  )
+
+  $('#sign_up_sport_name').live('change', ->
+    $this = $(this)
+    $other = $('#sign_up_other_sport_name_input')
+    if $this.val() == 'Other'
+      $other.show()
+    else
+      $other.hide()
+  )
+
+  $('.send-reminders').live('ajax:success', ->
+    $notice = $('<div class="alertbox notice">Reminder sent</div>')
+    $('#content')
+      .prepend($notice)
+    $notice.delay(3000).slideUp()
+  )
+
+  loader = ' <img src="<%= asset_path 'ajax-loader.gif' %>">'
+  $('.button[data-remote]')
+    .live('ajax:beforeSend', ->
+      $button = $(this)
+      $button.html( $button.html() + loader )
+    )
+    .live('ajax:complete', ->
+      $button = $(this)
+      $button.html( $button.html().replace(loader, '') )
+    )
+)()
+
+$(document).ready ->
+
+  $('textarea.tinymce').tinymce
+    convert_urls: false
+    relative_urls: false
+    theme: "advanced"
+    plugins: "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist"
+    theme_advanced_buttons1: "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,indent,outdent,|,sub,sup,|,fontselect,fontsizeselect"
+    theme_advanced_buttons2: "undo,redo,|,forecolor,|,bullist,numlist,|,link,unlink,anchor,image,cleanup,code,|,pasteword,|,preview,removeformat,visualaid,|,fullscreen"
+    theme_advanced_buttons3: ""
+    theme_advanced_toolbar_location: "top"
+    theme_advanced_toolbar_align: "left"
+    theme_advanced_statusbar_location: "bottom"
+    theme_advanced_resizing: true
+    theme_advanced_font_sizes: "10px,12px,14px,16px,18px"
+    gecko_spellcheck : true
+    paste_auto_cleanup_on_paste : true
+    paste_postprocess: (pl, o) ->
+      # remove &nbsp
+      o.node.innerHTML = o.node.innerHTML.replace(/&nbsp;/g, " ")
+
+  $('textarea.jwysiwyg').wysiwyg
+    rmMsWordMarkup: true
+    initialContent: ""
+    controls:
+      increaseFontSize:
+        visible: true
+      decreaseFontSize:
+        visible: true
+
+  $emailRecipientsInput = $('#email_recipients_string')
+  $($emailRecipientsInput).tokenInput( $emailRecipientsInput.attr('data-source'),
+    theme: 'facebook'
+    onResult: (results) ->
+      tokenResults = ( {id: value._id, name: value.first_name+" "+value.last_name+" &lt;"+value.email+"&gt;"} for value in results )
+      return tokenResults
+    prePopulate: eval($emailRecipientsInput.attr('data-pre-populate'))
+    hintText: "Start typing contact's name or email"
+    noResultsText: "No contacts found"
+    preventDuplicates: true
+  )
+
+  $peopleInput = $('#mass_interaction_person_ids_string')
+  $($peopleInput).tokenInput( $peopleInput.attr('data-source'),
+    theme: 'facebook'
+    onResult: (results) ->
+      tokenResults = ( {id: value._id, name: value.first_name+" "+value.last_name} for value in results )
+      return tokenResults
+    prePopulate: eval($peopleInput.attr('data-pre-populate'))
+    hintText: "Start typing contact's name"
+    noResultsText: "No contacts found"
+    preventDuplicates: true
+  )
+
+  $smsRecipientsInput = $('#sms_recipients_string')
+  $($smsRecipientsInput).tokenInput( $smsRecipientsInput.attr('data-source'),
+    theme: 'facebook'
+    onResult: (results) ->
+      tokenResults = ( {id: value._id, name: value.first_name+" "+value.last_name+" &lt;"+value.cell_phone+"&gt;" } for value in results )
+      return tokenResults
+    prePopulate: eval($smsRecipientsInput.attr('data-pre-populate'))
+    hintText: "Start typing contact's name or sms"
+    noResultsText: "No contacts found"
+    preventDuplicates: true
+  )
+
+  $('#form-public-url').click(->
+    $(this).focus().select()
+  )
+
+  # recruits page
+  $('.recruit-tabs').tabs()
+
+  # $('.assignment-form select').dropdownchecklist
+  #   onComplete: (selector) ->
+  #     $(selector).closest('form').submit()
+  #   textFormatFunction: (options) ->
+  #     "Assign"
+
+  (->
+    $sportName = $('#sign_up_sport_name')
+    if $sportName.length && $sportName.val() != 'Other'
+      $('#sign_up_other_sport_name_input').hide()
+  )()
+
+  (->
+    # stars
+    starsNode = $('.person-header .stars').stars
+      split: 2
+      callback: (ui, type, value) ->
+        $(".interaction-form").slideUp()
+        $(".interaction-form.new.rating").slideDown()
+        $('#interaction_rating').val(value)
+
+    if stars = starsNode.data("stars")
+      previous = stars.value()
+
+      $(".interaction-form.rating.new li.cancel a").click (e) ->
+        stars.select(previous)
+  )()
+
+  (->
+    # interaction buttons
+    buttons =
+      '.new-letter': '.letter'
+      '.new-phone-call': '.phone-call'
+      '.new-comment': '.comment'
+      '.new-visit': '.visit'
+      '.new-contact': '.contact'
+      '.new-place-call': '.place-call'
+      '.new-sms': '.sms'
+      '.new-donation': '.donation'
+
+    showForm = (actionClass, formClass) ->
+      $(".actions #{actionClass} a").click (e) ->
+        $(".interaction-form.new").slideUp()
+        $(".interaction-form.new#{formClass}").slideDown()
+        e.preventDefault()
+
+    showForm action, form for action, form of buttons
+
+    $(".interaction-form .cancel a").live("click", (e) ->
+      $(this).closest('.interaction-form').slideUp()
+      e.preventDefault())
+
+    # phone links
+    $phone_call = $('.interaction-form.new.phone-call')
+    $any_interaction = $('.interaction-form.new')
+    $place_call_button = $('.place-call-button')
+    $phone_call_number = $('.phone-call #interaction_phone_number')
+    $phone_call_number.change ->
+      if $phone_call_number.val()
+        $place_call_button.show()
+      else $place_call_button.hide()
+    $('a.phone').click (e) ->
+      e.preventDefault()
+      unless $phone_call.is(':visible')
+        if $any_interaction.is(':visible')
+          $any_interaction.slideUp('400', -> $phone_call.slideDown())
+        else
+          $phone_call.slideDown()
+      $phone_call_number.val($(this).attr('data-phone'))
+      $place_call_button.show()
+    $place_call_button.click (e) ->
+      e.preventDefault()
+      $('.place-call #interaction_phone_number').val($('.phone-call #interaction_phone_number').val())
+      $phone_call.slideUp('400', ->
+        $('.interaction-form.new.place-call').slideDown()
+      )
+  )()
+
+  (->
+    # edit interactions
+    $(".interaction-widget .interaction .edit-link").live("click",(e) ->
+      interaction = $(this).closest('.interaction')
+      interaction.slideUp()
+
+      form = interaction.next('.interaction-form')
+      form.slideDown()
+
+      $(".interaction-widget .edit.interaction-form li.cancel a").live("click", (e) ->
+        interaction.slideDown()
+        interaction.show()
+        e.preventDefault())
+
+      e.preventDefault())
+  )()
+
+  # tag autocomplete
+  # TODO make into a plugin
+  splitTags = (val) ->
+    val.split(/,\s*/);
+  extractLastTag = (term) ->
+    splitTags(term).pop()
+
+  autocompleteTags = (el) ->
+    $.getJSON $(el).attr('data-autocomplete-url'), (data) ->
+      $(el)
+        .bind "keydown", (event) ->
+          if event.keyCode == $.ui.keyCode.TAB && $(this).data("autocomplete").menu.active
+            event.preventDefault()
+        .autocomplete
+          minLength: 0
+          source: (request, response) ->
+            response($.ui.autocomplete.filter(data, extractLastTag(request.term)))
+          focus: (event, ui) ->
+            terms = splitTags(this.value)
+            terms.pop()
+            terms.push(ui.item.value)
+            this.value = terms.join(", ");
+            false
+          select: (event, ui) ->
+            terms = splitTags(this.value)
+            terms.pop()
+            terms.push(ui.item.value)
+            this.value = terms.join(", ");
+            false
+
+
+  (->
+    # tags
+    $("a.edit-tags").click (e) ->
+      e.preventDefault()
+      tags = $(this).closest('.tags')
+      form = tags.next('.tags-form')
+      tags.slideUp()
+      form.slideDown()
+
+    $(".tags-form .cancel a").click (e) ->
+      e.preventDefault()
+      form = $(this).closest('.tags-form')
+      tags = form.prev('.tags')
+      form.slideUp()
+      tags.slideDown()
+
+
+    $('.autocomplete-tags').each (i, el) ->
+      autocompleteTags(el)
+  )()
+
+  autocompleteSchools = (el, attachTo) ->
+    $(el).autocomplete
+      minLength: 2
+      source: $(el).attr('data-url')
+      select: (event, ui) ->
+        if item = ui.item
+          $(attachTo).val(item.id)
+    .data("autocomplete")._renderItem = (ul, item) ->
+      $("<li class='autocomplete-school-menu'></li>")
+      .data("item.autocomplete", item)
+      .append("<a><div class='item'>#{item.label}</div><div class='meta'>"+_([item.city,item.state]).compact().join(', ')+"</div></a>")
+      .appendTo(ul)
+
+  $('.autocomplete-schools')
+  .change ->
+    el = $(this)
+    target = $( el.attr('data-update') )
+    if el.val() == ''
+      target.val('')
+  .each (i, el) ->
+    el = $(this)
+    target = $( el.attr('data-update') )
+    autocompleteSchools(el, target)
+
+  autocompletePeople = (el, attachTo) ->
+    $(el).autocomplete
+      minLength: 2
+      source: $(el).attr('data-url')
+      select: (event, ui) ->
+        if item = ui.item
+          window.location.href = item.url;
+    .data("autocomplete")._renderItem = (ul, item) ->
+      $("<li class='autocomplete-person-menu'></li>")
+      .data("item.autocomplete", item)
+      .append("<a><div class='item'>#{item.label}</div><div class='meta'></div></a>")
+      .appendTo(ul)
+
+  autocompleteChildren = (el) ->
+    $(el).autocomplete
+      minLength: 2
+      source: $(el).attr('data-url')
+      select: (event, ui) ->
+        $('#person_children_ids_string').val (index,value) ->
+          if value then value.split(/,\s?/).concat(ui.item.id).join(', ') else ui.item.id
+        $('.children').append($('#childTemplate').tmpl({child_name: ui.item.value, child_id: ui.item.id}))
+        $(el).val('')
+        return false;
+    .data("autocomplete")._renderItem = (ul, item) ->
+       unless item.id in $('#person_children_ids_string').val().split(/,\s?/)
+        $("<li class='autocomplete-person-menu'></li>")
+        .data("item.autocomplete", item)
+        .append("<a><div class='item'>#{item.label}</div><div class='meta'>"+_([item.city,item.state]).compact().join(', ')+"</div></a>")
+        .appendTo(ul)
+
+  $('.autocomplete-people')
+  .change ->
+    el = $(this)
+    target = $( el.attr('data-update') )
+    if el.val() == ''
+      target.val('')
+  .each (i, el) ->
+    el = $(this)
+    target = $( el.attr('data-update') )
+    autocompletePeople(el, target)
+
+  $('.autocomplete-children')
+  .each (i, el) ->
+    autocompleteChildren(this)
+
+  $('.children .removeChild').live('click', (e) ->
+    wrapper = $(this).parent('.child')
+    $('#person_children_ids_string').val (index,value) ->
+      _(value.split(/,\s?/)).without(wrapper.attr('id').replace('child-','')).join(', ')
+    wrapper.hide()
+    e.preventDefault()
+  )
+
+  # Coach list
+  (->
+    $table = $('#person-list')
+    url = $table.data('source')
+    totalRecordCount = $table.attr('data-total-record-count')
+    people = $table.data('people')
+    personLink = (record) ->
+      $('<a></a>',
+        text: record[this.id],
+        href: record['profile_link']
+      )
+    unPersonLink = (cell) ->
+      $(cell).text()
+
+    stars = (rating) ->
+      rating = ( rating || 0 ) / 2
+      full_stars = Math.floor(rating)
+      split_star_px = (rating - full_stars) * 16
+      empty_stars = 5 - Math.min(5,Math.ceil(rating))
+      out = ''
+
+      for i in [1..full_stars] when full_stars > 0
+        out += "<div class='ui-stars-star ui-stars-star-on' style='width: 16px;'><span></span></div>"
+
+      if split_star_px > 0
+        out += "<div class='ui-stars-star ui-stars-star-on' style='width: " + split_star_px + "px;'><span style='margin-left: 0px;'></span></div>"
+        out += "<div class='ui-stars-star' style='width: " + (16 - split_star_px) + "px;'><span style='margin-left: -" + split_star_px + "px;'></span></div>"
+
+      for i in [1..empty_stars] when empty_stars > 0
+        out += "<div class='ui-stars-star' style='width: 16px;'><span></span></div>"
+
+      out
+
+    dynatable = $table.dynatable(
+      features:
+        search: false
+      table:
+        rowFilter: (rowIndex, record) ->
+          $('<tr></tr>',
+            id: 'person-row-' + record._id
+            'data-record-id': record._id
+          )
+        rowUnfilter: (rowIndex, row, record) ->
+          record._id = row.getAttribute('data-record-id')
+      inputs:
+        queries: $('#search_person, #user_filter, #board_filter, #person_scope, #tag-filter-inline > input, #grad_year_filter, #location_filter, #city_filter')
+        sorts:
+          sortable_name: 1
+
+      dataset:
+        ajax: true
+        ajaxUrl: url
+        ajaxOnLoad: true
+        ajaxData:
+          people: people
+        totalRecordCount: totalRecordCount
+      filters:
+        first_name: personLink
+        last_name: personLink
+        name: (record) ->
+          $('<a></a>',
+            text: "#{record['last_name']}, #{record['first_name']}"
+            href: record['profile_link']
+          )
+        location: (record) ->
+          if record.city_and_state
+            $('<a></a>',
+              "class": 'location-filter-link'
+              title: record.state
+              text: record.city_and_state
+              href: '#'
+            )
+        city: (record) ->
+          if record.city
+            $('<a></a>',
+              "class": 'city-filter-link'
+              title: record.city
+              text: jQuery.trim(record.city).substr(0,10)
+              href: '#'
+            )
+        state: (record) ->
+          if record.state
+            $('<a></a>',
+              "class": 'location-filter-link'
+              title: record.state
+              text: jQuery.trim(record.state).substr(0,10)
+              href: '#'
+            )
+        high_school: (record) ->
+          school_data = record.school
+          if school_data == null
+            school_data = record.school_name
+
+          if school_data
+            $('<div></div>',
+              "class": 'truncate',
+              title: school_data
+              text: jQuery.trim(school_data).substr(0,8)
+            )
+        user_ids: (record) ->
+          record.watcher_ids.join(' ') if 'watcher_ids' in record
+
+        checkbox_column: (record) ->
+          $('<input />',
+            type: 'checkbox'
+            value: record._id
+            name: 'people[]'
+            id: "person-checkbox-#{record._id}"
+          )
+        avg_rating: (record) ->
+          ratingData = record.common_rating
+          if ratingData == null
+            ratingData = record.avg_rating
+          stars(ratingData)
+
+        graduation_year: (record) ->
+          if record.graduation_year
+            $('<a></a>',
+              "class": 'graduation-year-filter-link'
+              href: '#'
+              title: record.graduation_year
+              text: record.graduation_year
+            )
+
+        tags: (record) ->
+          record.tags.join(', ') if record.tags
+
+        last_contact_time: (record) ->
+          title = undefined
+          if record.last_contact_info
+            title = "" + (record.last_contact_info.type || 'Contact') + " by " + (record.last_contact_info.user || 'Unknown User')
+          $('<div></div>',
+            title: title
+            text: record.last_contact_time
+          );
+
+        projected_position: (record) ->
+          position = record.projected_position
+          if position == null
+            position = record.type_of_rider
+          if position == null
+            position = record.primary_position
+          if position == null
+            position = record.position
+          if position
+            $('<a></a>',
+              "class": 'projected-position-filter-link'
+              href: '#'
+              title: position
+              text: position
+            )
+
+      unfilters:
+        user_ids: (cell, record) ->
+          text = $(cell).text()
+          record['watcher_ids'] = text.split(' ')
+          text
+        first_name: unPersonLink
+        last_name: unPersonLink
+        name: (cell, record) ->
+          name = $(cell).text().split(',')
+          record['last_name'] = name[0]
+          record['first_name'] = name[1]
+        location: (cell, record) ->
+          location = $(cell).text().split(',').trim()
+          record.city = location[0]
+          record.state = location[1]
+        checkbox_column: -> ""
+        tags: (cell, record) ->
+          record.tags = $(cell).text().split(',').trim()
+
+      params:
+        perPage: 'limit'
+        queryRecordCount: 'queried_record_count'
+    )
+
+    $('.tag-filter-link').live('click', (e) ->
+      dynatable = $table.first().data('dynatable')
+      dynatable.queries.add('tag_filter', $(this).data('tag'))
+      dynatable.process()
+      e.preventDefault()
+    )
+  )()
+
+  # Form list
+  (->
+    $table = $('#form-list')
+    url = $table.data('source')
+
+    dynatable = $table.dynatable(
+      features:
+        paginate: false
+      table:
+        rowUnfilter: (rowIndex, row, record) ->
+          record._id = row.getAttribute('data-record-id')
+      unfilters:
+        completed: (cell, record) ->
+          $cell = $(cell)
+          record.sortable_completed = parseInt($cell.text())
+          $cell.html()
+        modified: (cell, record) ->
+          $cell = $(cell)
+          #record.sortable_date = new Date($cell.text())
+          $cell.html()
+        updated_at: (cell, record) ->
+          new Date($(cell).text())
+    )
+  )()
+
+  # email
+  (->
+    $fields = $('#schedule-email-fields')
+    hideSchedule = $fields.data('hide-schedule')
+    newRecord = $fields.data('new-record')
+    $fields.hide() if hideSchedule
+    $('#email_schedule_attributes_relative_direction').change(->
+      if $(this).val() == 'before'
+        $('#email_schedule_attributes_relative_to').val($('#task_due_date').val())
+      else
+        $('#email_schedule_attributes_relative_to').val('')
+    )
+    $scheduleLink = $('#schedule-email-link')
+      .click((e) ->
+        submitText = if newRecord then 'Schedule' else 'Save'
+        $fields.slideToggle()
+          .find('input,select').removeAttr('disabled')
+        $(this)
+          .hide()
+          .siblings('input[type="submit"]').val(submitText)
+        e.preventDefault()
+      )
+    $scheduleLink.show() if hideSchedule
+    $cancelLink = $('#cancel-schedule-email')
+      .show()
+      .click((e) ->
+        $fields.slideToggle()
+        $scheduleLink
+          .show()
+          .siblings('input[type="submit"]')
+            .val('Send')
+            .attr('data-confirm', "You hit 'Cancel schedule'\n\nAre you sure you would like to send this email right now?")
+        # Clear out schedule_send_time values
+        $fields
+          .find('input,select')
+            .attr('disabled', 'disabled')
+        e.preventDefault()
+      )
+      # Cancel disable-with on save/send buttons so the user doesn't think we're sending their email when we're just previewing it
+    $('#email-preview-button').click ->
+      $button = $('.send-button, .save-button')
+      $button.data('disable-with',$button.val())
+  )()
+
+  # Email merge fields
+  (->
+    $('.email a.merge_field').click (e) ->
+      e.preventDefault()
+      $field = $($(this).attr('href'))
+      tag = $(this).data('tag')
+      # Leaving this here in case we need plain text editor again
+      # if ipad
+      #   if $field.getSelection().length > 0
+      #     $field.replaceSelection('{{'+tag+'}}')
+      #   else
+      #     $field.insertAtCaretPos('{{'+tag+'}}')
+      # else
+      $field.wysiwyg('insertHtml','&#123&#123'+tag+'&#125;&#125;') if $field.hasClass('wysiwyg')
+      $field.tinymce().execCommand('mceInsertContent',false,"{{#{tag}}}") if $field.hasClass('tinymce')
+  )()
+
+  # institutions
+  (->
+    $('.institution-dialog, .college-dialog, .club-dialog').dialog
+      width: 600
+      modal: true
+      autoOpen: false
+      draggable: false
+      resizable: false
+
+    $('.new-school-link').click (e) ->
+      e.preventDefault()
+      $('.institution-dialog').dialog("open")
+
+    $('.new-college-link').click (e) ->
+      e.preventDefault()
+      $('.college-dialog').dialog("open")
+
+    $('.new-club-link').click (e) ->
+      e.preventDefault()
+      $('.club-dialog').dialog("open")
+
+    $('.institution-dialog form')
+      # .bind 'ajax:beforeSend', ->
+      #    $('.action').addClass('loading')
+      .bind 'ajax:success', (event, obj, status) ->
+        $('.institution-dialog').dialog('close')
+        $('#person_school_id').val(obj._id)
+        $('#school').val(obj.name)
+      .bind 'ajax:error', ->
+        alert("Sorry, your last operation has failed.  Please try again.")
+
+    $('.college-dialog form')
+      # .bind 'ajax:beforeSend', ->
+      #    $('.action').addClass('loading')
+      .bind 'ajax:success', (event, obj, status) ->
+        $('.college-dialog').dialog('close')
+        $('#person_college_id').val(obj._id)
+        $('#college').val(obj.name)
+      .bind 'ajax:error', ->
+        alert("Sorry, your last operation has failed.  Please try again.")
+
+    $('.club-dialog form')
+      # .bind 'ajax:beforeSend', ->
+      #    $('.action').addClass('loading')
+      .bind 'ajax:success', (event, obj, status) ->
+        $('.club-dialog').dialog('close')
+        $('#person_club_id').val(obj._id)
+        $('#club').val(obj.name)
+      .bind 'ajax:error', ->
+        alert("Sorry, your last operation has failed.  Please try again.")
+
+  )()
+
+  # coaches/counselors
+  (->
+    dataTable = $('#institution-show table.counselor-list, #institution-show table.coach-list').dataTable
+      "sPaginationType": "full_numbers"
+      "bStateSave": false
+      sDom: 'rt'
+      bPaginate: false
+      "iDisplayLength": 25
+      "aLengthMenu": [25, 50, 100, 250, 500]
+      "aoColumnDefs": [
+        {
+          aTargets: ["actions", "phone"]
+          bSortable: false
+        }
+      ]
+  )()
+
+  # institution list
+  (->
+    $table = $('table.institution-list')
+    url = $table.data('source')
+    totalRecordCount = $table.data('total-record-count')
+    $table.dynatable
+      features:
+        search: false
+      inputs:
+        queries: $('.search_query, #user_filter')
+      dataset:
+        ajax: true
+        ajaxUrl: url
+        ajaxOnLoad: true
+        ajaxCache: false
+        perPageOptions: [25, 50]
+        totalRecordCount: totalRecordCount
+      filters:
+        name: (record) ->
+          $('<a></a>',
+            text: record.name
+            href: record.show_link
+          )
+      params:
+        queryRecordCount: 'queried_record_count'
+        perPage: 'limit'
+
+  )()
+
+  (->
+    $('#report-list').dynatable(
+      features:
+        search: false
+        paginate: false
+      table:
+        headRowClass: 'sortable-head'
+      inputs:
+        queries: $('.report-user-filter')
+      unfilters:
+        sortable_updated_at: (cell, record) ->
+          new Date($(cell).text())
+    )
+  )()
+
+  # dashboard
+  (->
+    $('#interaction-filter-form')
+      .bind('ajax:success', (e, data, status, xhr) ->
+        $('.interaction-list').html(data.html)
+      )
+      .bind('ajax:error', (e, xhr, status, error) ->
+        console.log(status)
+        alert("Sorry, your last operation has failed. Please try again.")
+      )
+    $('#dashboard select.interaction-filter').change ->
+      $(this).closest('form').submit()
+  )()
+
+  # recruit boards
+  (->
+    renumberRecruitsBoard = (sel) ->
+      $(sel).find('li.board-row').each (index) ->
+        $(this).find('.rank').html(index+1)
+
+    sortRecruits = (selector) ->
+      renumberRecruitsBoard(selector)
+
+      $.ajax
+        data: $(selector).sortable('serialize',{key:'sortable_list[]'}) + '&_method=put'
+        dataType:'script'
+        type:'post'
+        url:$(selector).attr('data-url')
+
+    $('ul.recruit-board-list').sortable
+      axis: 'y'
+      update: ->
+        sortRecruits(this)
+
+    $('form.set-default-recruit-board input').change (e) ->
+      $(this).closest('form').submit()
+      $(this).attr('disabled', 'disabled')
+      $('form.toggle-dashboard-recruit-board').hide()
+
+    $('form.toggle-dashboard-recruit-board input').change (e) ->
+      $(this).closest('form').submit()
+
+    $('li.board-row a.move-to-top').click (e) ->
+      e.preventDefault()
+      $(this).closest('li').prependTo('ul.recruit-board-list');
+      sortRecruits('ul.recruit-board-list');
+
+    $('li.board-row a.remove').click (e) ->
+      e.preventDefault()
+      $(this).closest('li').fadeOut(500, ->
+        $(this).remove()
+        sortRecruits('ul.recruit-board-list')
+      )
+  )()
+
+  # interactions on recruit's page
+  (->
+    $('.interaction-form.new')
+      .live 'ajax:success', (event, obj, status) ->
+        form_errors = $(obj.html["form"]).find('.inline-errors')
+        if form_errors.length > 0
+          $(this).replaceWith(obj.html["form"])
+          form_type = '.'+ $(this).attr('class').split(' ').join('.')
+          $(form_type).show()
+        else
+          $(this).replaceWith(obj.html["form"])
+          $('.interaction-widget .interactions').prepend(obj.html["feed"])
+
+      .live 'ajax:error', ->
+        alert("Sorry, your last operation has failed.  Please try again.")
+  )()
+  (->
+    $('.interaction-form.edit')
+      .live 'ajax:success', (event, obj, status) ->
+        form_errors = $(obj.html["form"]).find('.inline-errors')
+        if form_errors.length > 0
+          $(this).replaceWith(obj.html["form"])
+          form_type = '.'+$(this).attr('class').split(' ').join('.')
+          $('#interaction_'+ obj.html["interaction_id"]+ ' '+ form_type).show()
+        else
+          $('#interaction_'+ obj.html["interaction_id"]).html(obj.html["feed"])
+
+      .live 'ajax:error', ->
+        alert("Sorry, your last operation has failed.  Please try again.")
+  )()
+
+  # Transfer Students
+  (->
+    $student_type = $('#person_student_type')
+    $transfer_type = $('#person_transfer_type')
+    $transfer_type_input = $('#person_transfer_type_input')
+    $release_letter_input = $('#person_transfer_release_letter_input')
+    do toggle_release_letter = ->
+      if $transfer_type.val() == 'Four Year'
+        $release_letter_input.show()
+      else
+        $release_letter_input.hide()
+    do toggle_transfer_type = ->
+      if $student_type.val() == 'Transfer Student'
+        $transfer_type_input.show()
+        toggle_release_letter()
+      else
+        $transfer_type_input.hide()
+        $release_letter_input.hide()
+    $student_type.change -> toggle_transfer_type()
+    $transfer_type.change -> toggle_release_letter()
+  )()
+
+  # Alerts
+  (->
+    $('.redalert a.dismiss').bind 'ajax:success', (event, obj, status) ->
+      $(this).parent('.redalert').remove() if obj == true
+      $('.dashboard-alerts').hide() unless $('.dashboard-alerts .redalert').size() > 0
+  )()
+
+  # Online Form
+  (->
+    $form = $('#online-form #person_new, #online-form #person_edit')
+    $dialog = $("#prevent-enter-dialog")
+    $dialog.dialog
+      autoOpen: false
+      modal: true
+      resizable: false
+      width: 400
+      buttons:
+        "Submit Form": -> $form.submit()
+        "Continue Editing": ->
+          $submit = $('input[type="submit"]:disabled')
+          $submit.val('Send').removeAttr('disabled') if $submit
+          $dialog.dialog('close')
+    $form.keypress (e) ->
+      if e.which == 13 && !$(':focus').is('textarea')
+        $dialog.dialog('open')
+        $form.one('submit', (e) -> e.preventDefault())
+  )()
+
+  # Feedback
+  (->
+    $dialog = $('.feedback .dialog')
+    $dialog.dialog
+      title: "Leave Feedback"
+      autoOpen: false
+      modal: true
+      show: "slide"
+      width: 600
+      closeOnEscape: true
+    $('.feedback .button').click ->
+      $dialog.dialog('open')
+    $('.ui-dialog-content .cancel a').click ->
+      $dialog.dialog('close')
+    $('.ui-widget-overlay').live('click', ->
+      $dialog.dialog('close')
+    )
+    $('#new_feedback').live('ajax:success', ->
+      $('.ui-dialog-content #feedback_text').val('')
+      $dialog.dialog('close')
+      $thanks = $('<div></div>').html('Thank you for leaving feedback, we sincerely appreciate it.')
+      $thanks.dialog
+          title: "Success!"
+          show: "slide"
+          width: 600
+          closeOnEscape: true
+          buttons: [
+            text: "Close"
+            click: ->
+              $thanks.dialog('close')
+          ]
+    ).live('ajax:error', ->
+      $dialog.dialog('close')
+      $error = $('<div></div>').html("I'm sorry, something went wrong. Please try again later or send an email to <a href=\"mailto:support@scoutforce.com\">support@scoutforce.com</a>.")
+      $error.dialog
+          title: "Error"
+          show: "slide"
+          width: 600
+          closeOnEscape: true
+          buttons: [
+            text: "Close"
+            click: ->
+              $error.dialog('close')
+          ]
+    )
+  )()
+
+  # phone call interaction checkbox
+  $('.interaction_status').change (e) ->
+    if $(this).attr('value') == "Completed"
+      $(this).closest('form').find('.phone_call_countable').attr('checked', true)
+    else
+      $(this).closest('form').find('.phone_call_countable').attr('checked', false)
+
+  # general stuff
+  # $(".notice").delay(3000).slideUp()
+
+  $('.checkall').click (e) ->
+    $('.main-row-full').find(':checkbox').attr('checked', this.checked);
+
+  # autosubmit status dropdown
+  $('.status-form input[type=submit]').hide()
+  $('.status-form select').change (e) ->
+    $(this).closest('form').submit()
+
+  #popdowns
+  $('button.assign').popdown()
+  $('button.boards').popdown()
+
+  # autocomplete tags on tables
+  $('.dataTables_wrapper .autocomplete-tags').each (i, el) ->
+    autocompleteTags(el)
+
+  $('.person-list-widget button.tag').click (e) ->
+    e.preventDefault()
+
+    buttons = $(this).closest('.actions')
+    form = buttons.next('.action.tag')
+
+    buttons.slideUp()
+    form.slideDown()
+
+    $('.action.tag .cancel a').click (e) ->
+      e.preventDefault()
+      buttons.slideDown()
+      form.slideUp()
+
+  $('.person-list-widget button.contact-eval').click (e) ->
+    $this = $(this)
+    $form = $this.closest('form')
+    recipients = $form.find('input:checked[name="people[]"]').serialize()
+
+    url = $this.data('url')
+    $form.attr('action', url).submit()
+
+  $('.person-list-widget .action a.cancel').click (e) ->
+    e.preventDefault()
+
+    form = $(this).closest('.action')
+    buttons = form.prev('.actions')
+
+    form.slideUp()
+    buttons.slideDown()
+
+  $('.person-list-widget button.email').click (e) ->
+    $this = $(this)
+    $form = $this.closest('form')
+    recipients = $form.find('input:checked[name="people[]"]').serialize()
+
+    url = $this.data('url')
+    $form.attr('action', url).submit()
+
+  $('.person-list-widget button.sms').click (e) ->
+    form = $(this).closest('form')
+    form.attr('action', $(this).attr('data-url'))
+    form.submit()
+
+  $('.person-list-widget button.assign-task').click (e) ->
+    $this = $(this)
+    $form = $this.closest('form')
+    $assignees = $form
+      .find('input:checked[name="people[]"]')
+
+    $assignees.attr('name', 'assignee_ids[]')
+    $form.attr('action', $this.data('url')).submit()
+
+  $('.person-list-widget button.delete').click (e) ->
+    if confirm("Are you sure you want to delete these people?")
+      form = $(this).closest('form')
+      form.attr('action', $(this).attr('data-url'))
+      form.attr('data-remote',"true")
+      form.submit()
+      form.removeAttr('data-remote')
+      $('input:checked[name="people[]"]').each ->
+        $('#person-row-'+ $(this).val()).closest('tr').remove()
+
+  #editable sidebars
+  $('#sidebar ul.editable span.edit a').click (e) ->
+    e.preventDefault()
+    $(this).closest('.show-row').slideUp()
+    $(this).closest('.show-row').next('.edit-row').slideDown()
+
+  $('#sidebar ul.editable a.cancel').click (e) ->
+    e.preventDefault()
+    $(this).closest('.edit-row, .new-row').slideUp()
+    $(this).closest('.edit-row').prev('.show-row').slideDown()
+
+  $('#sidebar li.add-board a').click (e) ->
+    e.preventDefault()
+    $('#sidebar .new-row').slideDown()
+
+  $('#sidebar ul.editable .new-row input[type=text]').one("focus", ->
+    $(this).val("")
+  )
+
+  $('.country').live('change',(event) ->
+    element = event.target
+    country_name = $(element)[0].value
+    state = $(element).closest('form').find(".state")
+    if country_name
+      $.ajax(
+        url: "/countries/"+country_name+"/states"
+        type: "GET"
+        dataType: "json"
+        success: (states) ->
+          options = ''
+          options += '<option value="' + name + '">' + name + '</option>' for name in states
+          state.html(options)
+      )
+    else
+      state.html('<option value=""></option>')
+  )
+
+  $('#superbar select#scope').change (e) ->
+    $(this).closest('form').submit()
+
+  $('.print').click (e) ->
+    e.preventDefault()
+    window.print()
+
+  $('.cell-phone .number, #edit-cell-phone').click ->
+    $('.cell-phone').hide()
+    $('#user_cell_phone').show()
+
+  $('input.date_picker').datepicker
+    showOn: "button"
+    buttonImage: "<%= asset_path 'calendar.gif' %>"
+    buttonImageOnly: true
+    dateFormat: 'yy-mm-dd'
+    constrainInput: false
+
+  $('input.datetime_picker:enabled').datetimepicker
+    showOn: "button"
+    buttonImage: "<%= asset_path 'calendar.gif' %>"
+    buttonImageOnly: true
+    ampm: true
+    dateFormat: 'yy-mm-dd'
+    constrainInput: false
+
+  toggler = (toggle,toggled,show = false) ->
+    do toggle_if_checked = ->
+      if $(toggle).is(':checked')
+        $(toggled).toggle(!show)
+      else
+        $(toggled).toggle(show)
+    $(toggle).click(toggle_if_checked)
+
+  toggler('#person_plays_for_high_school_team','.high-school-teams')
+  toggler('#person_plays_for_club_team','.club-teams')
+  toggler('#person_plays_for_other_team','.other-teams')
+  toggler('#person_alumnus','.alumnus-fields')
+  toggler('#person_parent','.parent-fields')
+  toggler('#person_donor','.donor-fields')
+  toggler('#person_hunter_seat','.hunter-seat')
+  toggler('#person_western','.western')
+
+  # TODO: Move this to the check_box html
+  # For now, it's much easier to disable specific check boxes from the collection in JS than with Formtastic
+  $('#invitation_user_id').closest('form')
+    .find('input[name="invitation[program_ids][]"]:checked, #invitation_recipient_account_level:checked')
+      .attr('disabled', 'disabled')
+
+  $('#invitation_recipient_account_level').click ->
+      $('#invitation_program_ids_input input').attr('checked','checked') if $(this).is(':checked')
+
+  # This enables the placeholder fix jquery
+  $(this).placeholder()

@@ -1,0 +1,14 @@
+#notifications-list {
+  tr.active {
+
+  }
+
+  tr.inactive {
+    color: #999;
+    font-style: italic;
+  }
+}
+
+.alertbox a.dismiss {
+  float:right;
+}

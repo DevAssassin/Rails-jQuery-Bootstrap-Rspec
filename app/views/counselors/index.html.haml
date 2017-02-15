@@ -1,0 +1,27 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Listing counselors
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table#notifications-list.default_table{:width => '100%'}
+            %tr
+              %th
+              %th
+              %th
+          
+            - @counselors.each do |counselor|
+              %tr
+                %td= link_to 'Show', counselor
+                %td= link_to 'Edit', edit_counselor_path(counselor)
+                %td= link_to 'Destroy', counselor, :confirm => 'Are you sure?', :method => :delete
+          
+          %br
+          
+          = link_to 'New Counselor', new_counselor_path

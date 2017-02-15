@@ -1,0 +1,15 @@
+#form
+  %h3 Confirm identity
+  = form_tag "" do
+    %p
+      Before filling out this form, please tell us who you are.
+    = hidden_field_tag :task_id, params[:task_id]
+    = hidden_field_tag :program_id, params[:program_id] if params[:program_id]
+    %fieldset.inputs
+      %ol
+        %li.string.required
+          = label_tag "Full name"
+          = text_field_tag :submitter_name
+    %fieldset.buttons
+      = submit_tag "Proceed", :id => 'confirm-person'
+

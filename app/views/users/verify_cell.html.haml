@@ -1,0 +1,10 @@
+%h3 Verify Cell Phone Number
+%p You should be receiving a phone call at #{@phone} from us shortly. Please enter the code below when prompted:
+%p
+  %strong Code: #{@code}
+%p
+= semantic_form_for @user, :url => users_confirm_cell_path do |f|
+  = submit_tag "Click here once verified"
+  or
+  = link_to "Send another verification code", users_verify_cell_path
+

@@ -1,0 +1,7 @@
+.contents#user-profile-box-page
+  #sidebar
+    = render_cell(:person, :show_sidebar, :person => @person)
+  #sidebar-left-sec
+    = render_cell :person, :show, :person => @person
+  - content_for :body_id, "person-show"
+  - content_for :subnav, render(:partial => 'subnav')

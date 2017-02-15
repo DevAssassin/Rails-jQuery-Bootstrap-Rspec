@@ -1,0 +1,18 @@
+#form
+  %h3 Confirm identity
+  = form_tag "" do
+    %p
+      Before filling out this form, please confirm that you are #{@form.assignee.name}.
+    = hidden_field_tag :confirm_person, true
+    = hidden_field_tag :auth_token, auth_token
+    = hidden_field_tag :task_id, params[:task_id]
+    = hidden_field_tag :program_id, params[:program_id] if params[:program_id]
+    = hidden_field_tag :assignment_id, params[:assignment_id] if params[:assignment_id]
+    %p
+      = submit_tag "I am #{@form.assignee.name}, proceed", :id => 'confirm-person'
+    %br
+    %p
+      If you are not #{@form.assignee.name},
+      %b
+        = link_to "click here", form_complete_path(@form), :id => 'not-person'
+

@@ -1,0 +1,15 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3
+            Invite user to Program:
+            = @program.name
+        %div{:class => "widget_content contents"}
+          = form_tag send_invite_admin_account_program_users_path(@account, @program) do |f|
+            %label{:for => 'email'} Email
+            = text_field_tag :email
+            .submit-row.submit-row2
+              = submit_or_cancel :submit => 'Invite', :disable_with => 'Inviting...', :cancel => admin_account_program_path(@account,@program)
+

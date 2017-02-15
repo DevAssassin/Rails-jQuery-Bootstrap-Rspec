@@ -1,0 +1,57 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'i_social content_header'}
+        %h3
+          Social
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .actions.textCenter
+          %ul
+            %li
+              %a{:href => "https://graph.facebook.com/oauth/authorize?client_id=#{Scoutforce::FACEBOOK_CLIENT_ID}&redirect_uri=http://localhost:3000/callback/facebook&scope=offline_access,publish_stream"}
+                = image_tag("/assets/icons/gray/glyphicons_390_facebook.png")
+                connect facebook
+            %li
+              %a
+                = image_tag("/assets/icons/gray/glyphicons_391_twitter_t.png")
+                connect twitter
+        .clear
+      .social
+        .leftTabs
+          %ul.tabs
+            %li
+              %a{:href => '#tabb1'}
+                Update Status
+            %li
+              %a{:href => '#tabb2'}
+                Update Photo
+          .tab_container
+            .tab_content#tabb1
+              %textarea
+              .clear
+              %button.floatLeft.btn
+                Tag members
+              %button.floatLeft.btn
+                Post
+        .rightSection
+          .box
+            .head.posRel
+              Post Update To:
+              %a.posAbs
+                Edit
+            %ul
+              %li
+                %label
+                  %input{:type => 'checkbox'}
+                  Facebook Account
+                = image_tag("/assets/icons/gray/glyphicons_390_facebook.png")
+              %li
+                %label
+                  %input{:type => 'checkbox'}
+                  Twitter Account
+                = image_tag("/assets/icons/gray/glyphicons_391_twitter_t.png")
+            .clear

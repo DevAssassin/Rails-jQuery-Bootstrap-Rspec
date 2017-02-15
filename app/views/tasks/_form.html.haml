@@ -1,0 +1,59 @@
+= task_form(@task) do |f|
+  - if @task.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@task.errors.count, 'error')} prohibited this task from being saved:"
+      %ul
+        - @task.errors.full_messages.each do |msg|
+          %li= msg
+  = f.inputs do
+    = f.input :name, :label => "Task name"
+
+    - if current_scope.is_a?(Account)
+      = f.input :program, :as => :select, :collection => current_account.programs
+
+    = f.input :description, :as => :text
+
+    %ol#task-no-form
+      %li.string.optional
+        %label &nbsp;
+        = link_to "Assign form", "#", :id => "task-assign-form-group"
+
+      %li.string.optional#task-assignees-string
+        %label{:for => 'assignee_ids_string'} Assignees
+        = text_field_tag 'task[assignee_ids_string]', @task.assignees.collect(&:id),
+          :'data-source' => token_complete_people_path,
+          :'data-pre-populate' => @task.assignees.collect{ |a| {:id => a._id, :name => a.name} }.to_json
+
+    %ol#task-form-group
+      %li.string.optional
+        %label &nbsp;
+        = link_to "Don't assign form", "#", :id => "task-assign-no-form"
+
+      = f.input :form_group, :as => :select, :collection => current_account.form_groups,
+        :label => "Form",
+        :input_html => { :data => { :url => form_list_form_groups_path } },
+        :hint => "If assigning a multi-section form group, only one section in the group may have multiple assignees; the rest should each have one assignee only."
+
+      %ol#task-form-group-assignments
+        - if @form_group_forms
+          - @form_group_forms.each_with_index do |form, i|
+            / TODO: Clean up and simplify all this autocompleter bubbly stuff
+            %li.string.required
+              %label{:for => "task_form_group_assignments_#{form.id.to_s}_assignee_ids_string"} #{form.name} assignees
+              = text_field_tag "task[form_group_assignments][#{form.id.to_s}][assignee_ids_string]", nil,
+                :class => 'assignee_ids_string',
+                :data => { :source => token_complete_people_path, :'pre-populate' => form_group_assignment_pre_populate(@task, form, i) }
+    %li
+      %label
+      = check_box_tag :send_task_assigned_email, '1', true
+      %label{:for => :send_task_assigned_email}
+        - if @task.persisted?
+          Send a task assigned email to new assignees
+        - else
+          Send a task assigned email
+    = f.input :due_at, :label => "Due date", :input_html => { :"style"=> "width: 200px; !important", :class => 'date_picker' }
+
+  = f.buttons do
+    .submit-row
+      = submit_or_cancel :cancel => tasks_path
+

@@ -1,0 +1,25 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Program Level Analytics for #{link_to @account.name, admin_account_path(@account)}
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Program
+                %th SMS Messages Sent
+                %th Account SMS Usage
+            %tbody
+              - @stats.each do |s|
+                %tr
+                  %td= (link_to s[:program].name, admin_account_program_path(@account, s[:program]) if s[:program])
+                  %td= s[:count]
+                  %td= number_to_percentage (100 * (s[:count] / @total.to_f)), :precision => 2
+

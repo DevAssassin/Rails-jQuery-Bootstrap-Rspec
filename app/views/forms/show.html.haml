@@ -1,0 +1,30 @@
+- content_for :sidebar do
+  %ul.actions
+    - if @form_group
+      %li.assign-task
+        = link_to "Assign Form", new_task_path(:task => {:form_group => @form_group})
+.form-info
+  .actions
+    - if current_user.superuser?
+      %ul
+        %li
+          = link_to "Edit", edit_form_path(@form), :class => 'float-right'
+        - if @form.deletable?
+          %li
+            = link_to "Delete", form_path(@form), :method => :delete, :confirm => "Are you sure?", :class => 'float-right'
+  %h1= @form.name
+  - unless @form.description.blank?
+    %p= simple_format(@form.description)
+  %p
+    %label
+      Public URL:
+    = text_field_tag :public_url, form_complete_url(@form), :size => 90, :id => 'form-public-url'
+    = link_to "link", form_complete_url(@form), :target => :blank
+  %label
+    Form:
+  .form-content
+    %iframe{:src => form_preview_url(@form), :width => "100%", :height => "600px", :id => 'preview'}
+      %p
+        Your browser does not support iframes. Please visit
+        = link_to form_preview_url(@form)
+        to preview your form.

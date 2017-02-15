@@ -1,0 +1,34 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Email Templates for
+          = current_scope.name
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content no-padding"}
+          %table#users-list.default_table{:width => '100%'}
+            %thead
+              %tr
+                %th Thumbnail
+                %th Name
+                %th
+                %th
+            %tbody            
+              - @email_templates.each do |template|
+                %tr
+                  %td
+                    = image_tag(template.thumbnail_url) if template.thumbnail?
+                  %td= template.name
+                  %td= link_to 'Edit', edit_admin_account_email_template_path(current_account, template)
+                  %td= link_to 'Destroy', admin_account_email_template_path(current_account, template), :confirm => 'Are you sure?', :method => :delete
+            
+        %div{:class => "widget_content"}            
+          - if current_program
+            = link_to 'New Email template', new_admin_account_program_email_template_path(current_account, current_program)
+          - else
+            = link_to 'New Email template', new_admin_account_email_template_path(current_account)

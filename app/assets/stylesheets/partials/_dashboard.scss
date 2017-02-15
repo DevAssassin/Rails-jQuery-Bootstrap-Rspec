@@ -1,0 +1,60 @@
+body#dashboard {
+  .left-column {
+    @include column(23);
+  }
+  .right-column {
+    @include column(23, true);
+  }
+  .recently-viewed-recruits, .top-recruits, .dashboard-recruits, .dashboard-programs {
+    @include column(23, true);
+  }
+  .interaction-list {
+    @include column(23);
+    ul.interactions {
+      @include column(22);
+      .details {
+        @include column(17, true);
+      }
+    }
+  }
+
+  div.dashboard-interactions {
+    @include column(23);
+  }
+
+  div.interaction-filter {
+    @include column(23);
+    border-bottom:1px solid #b0b1ba;
+    margin-bottom:10px;
+    .filter-control{
+      float:right;
+      display:inline-block;
+      text-align:right;
+      line-height:3em;
+    }
+    h2 {display:inline-block;}
+  }
+
+  .top-recruits {
+    a.button {
+      float:right;
+      display:inline-block;
+      line-height:1.75em;
+      height:1.75em;
+    }
+  }
+
+  .compact-recruit-list, .dashboard-programs .program-list {
+    border-left:1px solid #E8ECF1;
+    border-right:1px solid #E8ECF1;
+    th {
+      background-color:#E8ECF1;
+      border-bottom:1px solid #b0b1ba;
+    }
+    td {
+      border-bottom:1px solid #E8ECF1;
+    }
+  }
+
+}
+

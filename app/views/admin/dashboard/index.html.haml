@@ -1,0 +1,16 @@
+.contents
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Admin Dashboard
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content"}
+          %h3= link_to 'Manage Accounts', admin_accounts_path
+          %h3= link_to 'Manage Users', admin_users_path
+          %h3= link_to 'Export Users', admin_users_path(:format => :csv)
+          %h3= link_to 'Notifications', admin_notifications_path

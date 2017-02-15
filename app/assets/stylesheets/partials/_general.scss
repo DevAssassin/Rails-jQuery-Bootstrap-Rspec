@@ -1,0 +1,126 @@
+//AI: Some blueprint overrides here
+body.bp {
+  a {
+    color: #0033cc;
+    text-decoration: underline;
+    &:visited {
+      color:#0033cc;
+    }
+    &:hover {
+      color:#fff;
+      background-color:#0033cc;
+      text-decoration:none;
+    }
+  }
+
+  td.rank{font-size:1.4em; font-weight:bold; text-align:center;}
+
+  .center {text-align:center;}
+
+  h2{margin-bottom:0em;}
+
+  button, input[type=submit], input.submit, a.button {
+    @include clean-gray-button;
+    height: 2em;
+    padding: 3px 5px;
+    text-decoration: none;
+  }
+}
+
+.redalert {
+  display: block;
+  padding: 10px 30px 10px 50px;
+  margin:0;
+  color: #000;
+  text-shadow: none;
+  border: 3px solid #DC0A0A;
+  background: #ff6666 url(image-path('red_alert.png')) 10px 50% no-repeat;
+  position: relative;
+  a.dismiss {
+    display: block;
+    text-decoration: none;
+    background-color: rgba(255,255,255,.7);
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    -moz-border-radius: 5px;
+    -wekbit-border-radius: 5px;
+    border-radius: 5px;
+    color: #300 !important;
+    &:hover {
+      color: #300;
+      background-color: #fff;
+    }
+  }
+}
+
+.bluenotice {
+  display: block;
+  padding: 10px 10px 10px 50px;
+  margin:0;
+  color: #000;
+  text-shadow: none;
+  border: 3px solid #4050ff;
+  background: #7fc3ff url(image-path('blue_notice.png')) 10px 50% no-repeat;
+}
+
+.feedback {
+  .button {
+    position: absolute;
+    left: 0;
+    top: 200px;
+    border: solid 2px #fff;
+    border-left: none;
+    cursor: pointer;
+    z-index: 1000;
+    height: 88px;
+    text-indent: -9999px;
+    width: 32px;
+    background: url(image-path('feedback.png')) no-repeat;
+    &:hover {
+      background-position: -32px;
+    }
+  }
+  .dialog {
+    display: none;
+  }
+  .impthing span * {
+    height: 200px;
+    margin: -200px 0 0 -5000px;
+  }
+}
+
+.ui-dialog-content {
+  fieldset.inputs {
+    margin-bottom: 0;
+    ol li {
+      padding-left: 10px;
+      label {
+        display: block;
+        float: none;
+        width: auto;
+        text-align: left;
+      }
+    }
+    p.inline-hints {
+      padding-left: 0;
+    }
+  }
+  fieldset.buttons {
+    padding-top: 0;
+  }
+  #feedback_text {
+    width: 90%;
+  }
+}
+.ui-dialog-buttonset {
+  .ui-button {
+    height: auto;
+  }
+}
+

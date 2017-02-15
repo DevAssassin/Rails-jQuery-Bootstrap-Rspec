@@ -1,0 +1,11 @@
+#form
+  - @assignments.each do |assignment|
+    - if assignment.completed?
+      = render_cell :completed_form, :show, :completed_form => assignment.completed_form
+    - else
+      %p.preview-meta
+        #{assignment.form.name} not yet completed, waiting on
+        = link_to assignment.assignee.name, person_path(assignment.assignee)
+      %hr
+      = form_tag "#" do
+        = assignment.form.sanitized_html.html_safe

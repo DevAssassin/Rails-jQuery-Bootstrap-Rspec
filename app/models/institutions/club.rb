@@ -1,0 +1,2 @@
+class Club < Institution
+end

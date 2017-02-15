@@ -1,0 +1,32 @@
+= semantic_form_for [:admin, @user] do |f|
+  = f.inputs :name => "General" do
+    = f.input :first_name
+    = f.input :last_name
+    = f.input :email_from, :hint => "user name in the from field"
+    = f.input :email_signature, :as => :text, :hint => "it is appended to every mail user sends", :input_html => { :class => current_user.editor }
+    %li
+      = f.label :cell_phone
+      = f.text_field :cell_phone, :class => ("hidden" if @user.cell_phone.present?)
+      .cell-phone{:class => ("hidden" if @user.cell_phone.blank?)}
+        %span.number{:title => "Click to edit"}= @user.cell_phone
+        = link_to "Edit", "#", :id => "edit-cell-phone"
+        - if @user.cell_phone_verified?
+          %span#verified
+            &#10004;&nbsp;Verified
+            = link_to "Click to reset Caller ID", users_unverify_cell_path
+        - else
+          %span#unverified
+            &#10006;&nbsp;Unverified
+            = link_to " (Click to verify)", users_verify_cell_path
+    = f.input :time_zone, :as => :time_zone, :priority_zones => ActiveSupport::TimeZone.us_zones
+
+  -if @user.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+      %ul
+        - @user.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions.submit-row
+    = submit_or_cancel :cancel => admin_users_path
+

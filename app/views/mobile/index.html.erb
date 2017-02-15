@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <script>
+    // For the time being, just start over if you refresh
+    if (location.href.indexOf("#") != -1) {
+      location.href = location.href.replace(/#.*/, '');
+    }
+  </script>
+
+	<head>
+	<title>ScoutForce</title>
+
+  <%= stylesheet_link_tag 'm/css/mobile' %>
+
+  <%= javascript_include_tag 'm/js/app' %>
+
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+
+  <link rel="apple-touch-icon-precomposed" href="<%= asset_path 'm/img/bookmark-icon.png' %>" />
+
+</head>
+<body>
+
+<div data-role="page" id='home_page' data-add-back-btn='false'>
+
+	<div data-role="header" data-position='fixed'>
+    <a href="#settings" data-rel='dialog' data-transition='slidedown' style="width: 36px; height: 26px;">
+      <%= image_tag "m/img/gear.png", style: "position: relative; top: -1px; width:16px;" %>
+    </a>
+		<h1>Dashboard</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+    <ul data-role="listview" class='interactions'>
+      <p style='text-align: center'>Loading...</p>
+    </ul>
+	</div><!-- /content -->
+
+  <div data-auto-build='footer-navbar'></div>
+</div><!-- /page -->
+
+<div data-role='page' id='people_list' data-add-back-btn='false'>
+	<div data-role="header" data-position='fixed'>
+		<h1>People</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">
+    <ul data-role="listview" data-collectionfilter="true">
+    </ul>
+  </div><!-- /content -->
+
+  <div data-auto-build='footer-navbar'></div>
+</div>
+
+<div data-role='page' id='phone_number_picker_dialog'>
+	<div data-role="header">
+		<h1>Choose</h1>
+	</div><!-- /header -->
+
+  <div data-role='content'>
+    <ul data-role='listview' class='interactions' data-inset='true'>
+    </ul>
+  </div>
+</div>
+
+<div data-role='page' id='make_phone_interaction'>
+	<div data-role="header">
+		<h1>Phone Call</h1>
+	</div><!-- /header -->
+
+  <div data-role="content" role="main">
+    <form action="#" method="post">
+      <div data-role="fieldcontain">
+        <label for="phone_number" class='ui-input-text'>Phone Number</label>
+        <input type="text" name="phone_number">
+      </div>
+      <div data-role="fieldcontain">
+        <label for="duration" class='ui-input-text'>Duration (mins)</label>
+        <input type="number" name="duration">
+      </div>
+      <div data-role="fieldcontain">
+        <label for="status" class='ui-input-text'>Status</label>
+        <select name='status'>
+          <option>Completed</option>
+          <option>Left VM</option>
+          <option>Unreachable</option>
+          <option>Incoming</option>
+          <option>Initiated</option>
+        </select>
+      </div>
+      <div data-role="fieldcontain">
+        <label for="text" class='ui-input-text'>Text</label>
+        <textarea name='text'></textarea>
+      </div>
+    </form>
+
+    <a href="#" data-role="button" data-type='savebutton'>Save</a>
+
+	</div>
+
+</div>
+
+<div data-role='page' id='settings'>
+  <div data-role='header'>
+    <h1 style='font-size: .9em;'>Settings</h1>
+  </div>
+
+	<div data-role="content">
+    <ul data-role="listview" data-inset='true'>
+      <li>Loading...</li>
+    </ul>
+	</div><!-- /content -->
+</div>
+
+
+<div data-role='page' id='make_email_interaction'>
+	<div data-role="header">
+		<h1>Email</h1>
+	</div><!-- /header -->
+
+  <div data-role="content" role="main">
+    <form action="#" method="post">
+      <div data-role="fieldcontain">
+        <label for="subject" class='ui-input-text'>Subject</label>
+        <input type="text" name="subject">
+      </div>
+      <div data-role="fieldcontain">
+        <textarea name='body'></textarea>
+      </div>
+    </form>
+
+    <a href="#" data-role="button" data-type='sendbutton'>Send</a>
+
+	</div>
+</div>
+
+<script type='text/template' id='person-detail-template'>
+  <div data-role="header" data-position='fixed'>
+    <h1>{{ full_name }}</h1>
+  </div><!-- /header -->
+
+  <div data-role="content" class='profile'>
+    <div class='details'>
+      <div class='personImage'><img src=''></div>
+      <h2 class='personName'>{{ full_name }}</h2>
+      <div class='rating'></div>
+      <div class='school'></div>
+      <div class='projectedPosition'></div>
+      <div><a href='#' data-rel='more-info'>More Info</a></div>
+    </div>
+
+    <br style='clear: both'>
+
+    <div class='interactionButtons' data-role="controlgroup" data-type="horizontal">
+      <a href="#" data-transition='slidedown' data-rel='dialog' data-role="button">Phone</a>
+      <a href="#" data-transition='slidedown' data-rel='dialog' data-role="button">Email</a>
+      <a href="#" data-transition='slidedown' data-rel='dialog' data-role="button">SMS</a>
+    </div>
+
+    <ul data-dividertheme='a' data-role='listview' class='rules' data-inset='true'>
+      <li class='call-rules'></li>
+      <li class='motd'></li>
+    </ul>
+
+    <ul data-dividertheme='a' data-role='listview' class='interactions' data-inset='true'>
+    </ul>
+  </div><!-- /content -->
+
+</script>
+
+<script type='text/template' id='person-more-info-template'>
+  <div data-role="header" data-position='fixed'>
+    <h1><%%= fullName %></h1>
+  </div><!-- /header -->
+
+  <div data-role="content" class='more-info'>
+  </div><!-- /content -->
+
+</script>
+
+<script type='text/template' id='footer-tabbar-template'>
+  <div data-role='footer' data-position='fixed'>
+    <div data-role="navbar">
+      <ul>
+        <li><a href="#home_page" data-transition="none">Dashboard</a></li>
+        <li><a href="#people_list" data-transition="none">Contacts</a></li>
+      </ul>
+    </div><!-- /navbar -->
+  </div><!-- /footer -->
+</script>
+
+<script type='text/template' id='interaction-list-item-template'>
+  <a href='{{ pageId }}'>
+    <p>
+      <span class="type">{{ type }}</span>
+      <span class="time">{{ time }}</span>
+      by
+      <span class="user">{{ user_name }}</span>
+    </p>
+    <h4>{{ person_name }}</h4>
+    <p class='rating'>{{ rating }}</p>
+    <p class='subject'>{{ subject }}</p>
+    <p class='text'>{{ text }}</p>
+  </a>
+</script>
+
+<script type='text/template' id='interaction-detail-template'>
+  <div data-role="header" data-position='fixed'>
+    <h1>{{ type }}</h1>
+  </div><!-- /header -->
+
+  <div data-role="content" class='interaction-detail-content'>
+    <ul data-role='listview' style='margin-bottom: 30px'>
+      <li><label>When:</label><span class='time'>{{ time }}</span></li>
+      <li class='subjectRow'><label>Subject:</label><span class='subject'>{{ subject }}</span></li>
+      <li class='ratingRow'><label>Rating:</label><span class='rating'>{{ rating }}</span></li>
+    </ul>
+    <div class='text'>{{ text }}</div>
+  </div><!-- /content -->
+</script>
+
+<script type='text/template' id='interaction-detail-person-list-item-template'>
+  <a href='#'><label>{{ label_name }}</label><span>{{ person_name }}</span></label></a>
+</script>
+
+</body>
+</html>
+

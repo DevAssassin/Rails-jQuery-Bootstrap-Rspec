@@ -1,0 +1,8 @@
+%li.custom_field{ :class => ('new' if form.object.new_record?) }
+  = form.check_box :visible, :title => 'Visible?'
+  %label.field-label= form.object.label
+  = form.text_field :label, :class => 'rename_input', :placeholder => 'Untitled', :value => (form.object.label == 'Untitled' ? '' : form.object.label)
+  = link_to "Rename", "#", :class => 'rename_link'
+  = form.select :section, Programs::CustomField::Sections, {}, :class => 'field-section'
+  = form.hidden_field '_destroy' unless form.object.new_record?
+  = link_to "Delete", "#", :class => "delete_link", :confirm => "Are you SURE you want to delete this field? All data saved for this field will be lost!"  

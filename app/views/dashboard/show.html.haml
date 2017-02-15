@@ -1,0 +1,73 @@
+= javascript_include_tag 'fullcalendar.js'
+.contents#dashboard
+  .row-fluid
+    .span6
+      %div{:class => 'ico_16_dashboard content_header'}
+        %h3
+          Dashboard
+        %span
+          General Information
+  .separator
+    %span
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "textUpper pl10"}
+            RECENT ACTIVITY
+        %div{:class => "widget_content no-padding"}
+          .dashboard-interaction-list-widget
+            = render_cell :interaction, :filter, :url => settings.filter_callback_url
+            = render_cell :interaction, :list, :interactions => @interactions
+  - if settings.show_programs?
+    .row-fluid
+      .span12
+        .widget_wrapper
+          .widget_header
+            %h3{:class => "textUpper pl10"}
+              Programs
+          .widget_content
+            .dashboard-programs
+              %table.program-list.default_table{:"width" => "100%"}
+                %thead
+                  %tr
+                    %th Sport
+                    %th Staff
+                    %th Players
+                %tbody
+                  - @programs.each do |program|
+                    %tr
+                      %td= link_to program.name, change_scope_path(:scope => "Program|#{program.id}")
+                      %td= program.staff.count
+                      %td= program.rostered_players.count
+  -#.row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => "icos_calendar"}
+            Events
+        .widget_content
+          #calender.utopia-calendar-day
+:javascript
+  $(document).ready(function() {
+      $('#dashboard-interaction-list').dataTable( {
+          "aaSorting": [],
+          "sPaginationType":"full_numbers",
+          "bStateSave": true
+      } );
+  } );
+  var date = new Date();
+  var d = date.getDate();
+  var m = date.getMonth();
+  var y = date.getFullYear();
+  $(document).ready(function(){
+    $("#calender").fullCalendar({
+        header:{
+            left:'prev,next today',
+            center:'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        editable:false,
+        height:540
+    });
+  });

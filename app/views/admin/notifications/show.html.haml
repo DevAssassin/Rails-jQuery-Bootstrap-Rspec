@@ -1,0 +1,9 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        %div{:class => "widget_content contents"}
+          = @notification.text
+          = link_to 'Edit', edit_admin_notification_path(@notification)
+          \|
+          = link_to 'Back', admin_notifications_path

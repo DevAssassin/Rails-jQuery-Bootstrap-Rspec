@@ -1,0 +1,46 @@
+.customize-form {
+ .custom-fields {
+    border: solid 1px #ccc;
+    list-style: none;
+    margin: 0 0 1em 0;
+    padding: 0;
+    width: 400px;
+  }
+  li {
+    display: block;
+    width: 100%;
+    border-bottom: solid 1px #ddd;
+    line-height: 2em;
+    &:hover {
+      background-color: #eee;
+    }
+    &.rename, &.new {
+      .rename_input {
+        display: inline-block;
+      }
+      .rename_link {
+        display: none;
+      }
+      .field-label {
+        display: none;
+      }    
+    }
+    &.add-item {
+      text-indent: 30px;
+    }
+    input[type="checkbox"] {
+      margin: 7px;
+    }
+    .rename_input {
+      display: none;
+      width: 150px;
+    }
+    .delete_link {
+      float: right;
+      margin-right: 1em;
+    }
+    .field-section {
+      margin-left: 1em;
+    }
+  }
+}  

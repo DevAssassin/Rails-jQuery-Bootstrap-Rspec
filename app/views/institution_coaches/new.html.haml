@@ -1,0 +1,11 @@
+.contents  
+  .row-fluid
+    .span12
+      .widget_wrapper
+        .widget_header
+          %h3{:class => 'i_contact'}
+            New coach for 
+            = @institution.name
+        %div{:class => "widget_content  no-padding"}
+          = render 'form'
+

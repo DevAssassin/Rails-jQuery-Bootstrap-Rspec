@@ -1,0 +1,25 @@
+#users-list td {
+  vertical-align: top;
+  & .account-name,
+  .program-name {
+    display: block;
+    padding: 2px 5px;
+    border: solid 1px #ddd;
+    border-top-width: 0;
+    width: 100px;
+    &:first-child {
+      border-top-width: 1px;
+    }
+    & a {
+      float: right;
+      display: block;
+      & img {
+        vertical-align: middle;
+        margin-bottom: 2px;
+      }
+    }
+  }
+}
+.account-name {
+  font-weight: bold;
+}
