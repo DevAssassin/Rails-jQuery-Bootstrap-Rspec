@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+
+class StageThis < Thor
+  default_task :stage
+
+  desc "stage [BRANCH]", "force pushes [BRANCH] to staging"
+  def stage(branch = nil)
+    unless branch
+      branch = ask("Branch: ")
+    end
+
+    `git fetch`
+    `git checkout master`
+    `git branch -D stager_temp`
+    `git checkout -b stager_temp origin/#{branch}`
+    `cap staging deploy`
+    `git checkout master`
+  end
+end
+
+StageThis.start

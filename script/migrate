@@ -1,0 +1,340 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'mysql'
+require 'logger'
+
+APP_PATH = File.expand_path('../../config/application',  __FILE__)
+require File.expand_path('../../config/environment',  __FILE__)
+
+NEW_RECRUIT_ATTRIBUTES = {
+  "id" => nil,
+  "street_address" => nil,
+  "address2" => nil,
+  "city" => nil,
+  "state" => nil,
+  "zip" => nil,
+  "country" => nil,
+  "institution_id" => nil,
+  "coach_id" => nil,
+  "athletic_rating_in_stars" => nil,
+  "recruit_status_id" => nil,
+  "forty_yd_time" => nil,
+  "created_by" => nil,
+  "date_of_birth" => "birthdate",
+  "act_score" => "act_total",
+  "academic_honors_awards" => "honors_awards",
+  "individual_awards" => "individual_accomplishments",
+  "other_sports" => "other_sports_played",
+  "recruits_board" => nil,
+  "list_position" => nil,
+  "account_id" => nil,
+  "anticipated_major" => "major",
+  "top_5_colleges" => "top_colleges",
+  "coach_info" => nil,
+  "video_link" => "links",
+  "height_inches" => nil,
+  "height_feet" => nil,
+  "rating" => nil,
+  "invited_by" => nil,
+  "latitude" => nil,
+  "longitude" => nil,
+  "link_recruit_to_a_school" => nil,
+  "twitter_username" => "twitter_handle",
+  "why_interested_in_our_school" => "school_interest",
+  "tournament_schedule" => nil,
+  "deleted_at" => nil,
+  "team_accomplishments" => nil
+}
+
+class Migrator < Thor
+  desc "program SUBDOMAIN", "migrate program with subdomain SUBDOMAIN"
+  method_options :create => :boolean, :to => :string
+  def program(subdomain)
+    logger.info("Migrating account #{subdomain}")
+
+    account = find_account_by_subdomain(subdomain)
+    logger.info("Legacy account found: #{account.inspect}")
+
+    new_account = Account.where("legacy_record.id" => account["id"]).first
+    new_program = nil
+
+    if options[:to]
+      # TODO: add program to existing account
+    else
+      # add program to new account
+      if new_account
+        logger.info("Account already exists in new system.  Skipping creation")
+
+        #TODO find appropriate program
+        new_program = new_account.programs.first
+      else
+        new_account = Account.new(:name => account["display_name"])
+        new_account[:legacy_record] = account
+        new_account.save
+
+        logger.info("Created new account with ID: #{new_account.id}")
+
+        new_program = Program.new
+        new_program.account = new_account
+        new_program.save
+
+        logger.info("Created new program with ID: #{new_program.id}")
+      end
+    end
+
+    each_user_for_account(account["id"]) do |u|
+      email = u['email']
+
+      logger.info "Legacy user found with email address: #{email}"
+
+      new_user = User.where(:email => email).first
+
+      if new_user
+        logger.info "Existing user found with email #{email}, adding to program"
+      else
+        logger.info "Creating new account with email #{email}"
+        new_user = User.new
+        new_user.email = email
+        new_user.first_name = u['first_name']
+        new_user.last_name = u['last_name']
+        new_user.password = "testtest"
+
+        new_user[:legacy_record] = u
+      end
+
+      if new_user.program_ids.include?(new_program.id)
+        logger.info "User already a member of program"
+      else
+        logger.info "Adding user to program"
+        new_user.program_ids << new_program.id
+      end
+
+      new_user.save!
+    end
+  end
+
+  desc "recruits SUBDOMAIN PROGRAM", "migrate recruits from SUBDOMAIN to PROGRAM"
+  def recruits(sub, pid)
+    db.query("SET NAMES 'utf8'")
+
+    acct = find_account_by_subdomain(sub)
+    program = Program.find(pid)
+
+    each_recruit_for_account(acct["id"]) do |r|
+      logger.info "Importing recruit: #{r['last_name']}, #{r['first_name']} (##{r['id']})"
+
+      def r.remap(mapping)
+        self.inject({}) do |h, (k, v)|
+          if mapping.has_key?(k)
+            if new_key = mapping[k]
+              h[new_key] = v
+            end
+          else
+            h[k] = v
+          end
+
+          h
+        end
+      end
+
+      recruit = Recruit.where("legacy_record.id" => r["id"]).first
+
+      if recruit
+        logger.info "Recruit already in system, skipping"
+      else
+        logger.info "Recruit not found, creating new record"
+        recruit = Sport::Sales.new
+
+        new_hash = r.remap(NEW_RECRUIT_ATTRIBUTES)
+
+        new_hash.each do |k, v|
+          recruit.send("#{k}=", v.try(:strip))
+        end
+
+        address = recruit.build_address.tap do |a|
+          a.street = r['street_address']
+          a.city = r['city']
+          a.state = r['state']
+          a.country = case r['country']
+                      when "United States"
+                        "United States of America"
+                      else
+                        r['country']
+                      end
+          a.post_code = r['post_code']
+        end
+
+        recruit.tags = tags_for_recruit(r['id'])
+
+        #TODO: boards
+        #TODO: assignments
+
+        # SALES-SPECIFIC STUFF! Remove this before running real migrations!
+
+        recruit.title = r['street_address']
+
+        recruit.status = case r['recruit_status_id'].to_i
+        when 1 #take
+          "Cold Lead"
+        when 2 #hold
+          "Contacted"
+        when 3 #walkon
+
+        when 4 #offered
+          "Demoed"
+        when 5 #accepted
+          "Trial"
+        when 6 #rejected
+
+        when 7 #committed
+          "Customer"
+        else
+
+        end
+
+        # END SALES-SPECIFIC STUFF
+
+        recruit['legacy_record'] = r
+        recruit.program = program
+        recruit.save!
+
+        each_interaction_for_recruit(r["id"]) do |int|
+          interaction = Interaction.where("legacy_record.id" => int["id"]).first
+          user = User.where("legacy_record.id" => int['initiator_id']).first
+          logger.warn "Interaction user linking failed: (#{int['id']}, #{int['initiator_id']})" unless user
+
+          unless interaction
+            case int['interaction_type_id'].to_i
+            when 1 #comment
+              interaction = Interactions::Comment.new
+            when 2 #eval
+              interaction = Interactions::Contact.new.tap do |c|
+                c.contact_type = "Evaluation"
+                c.others_present = int['others_present']
+                c.location = int['location']
+                c.event = int['event']
+              end
+            when 3 #phonecall
+              interaction = Interactions::PhoneCall.new.tap do |p|
+                p.phone_number = int['phone_number']
+                p.duration = int['duration_in_seconds'].blank? ? '0' : int['duration_in_seconds']
+                p.status = int['status']
+              end
+            when 4 #email
+              interaction = Interactions::Email.new.tap do |e|
+                e.subject = int['subject']
+                # TODO: e.from_email
+                e.to_email = int['to']
+              end
+
+              email = Email.new.tap do |e|
+                e.cc = int['cc']
+                e.bcc = int['bcc']
+                e.subject = int['subject']
+                e.body = int['notes']
+              end
+
+              email.save!
+
+              interaction.email = email
+            when 5 #letter
+              interaction = Interactions::Letter.new.tap do |l|
+                l.subject = int['subject']
+              end
+            when 6 #creation
+              interaction = Interactions::Creation.new.tap do |c|
+                c.creation_type = 'Migration'
+              end
+            when 7 #contact
+              interaction = Interactions::Contact.new.tap do |c|
+                c.contact_type = "Contact"
+                c.others_present = int['others_present']
+                c.location = int['location']
+                c.event = int['event']
+              end
+            when 8 #visit
+              interaction = Interactions::Visit.new.tap do |v|
+                v.visit_type = int['visit_type']
+              end
+            when 9 #contact/eval
+              interaction = Interactions::Contact.new.tap do |c|
+                c.contact_type = "Contact and Evaluation"
+                c.others_present = int['others_present']
+                c.location = int['location']
+                c.event = int['event']
+              end
+            when 10 #rating
+              if user
+                interaction = Interactions::Rating.new.tap do |r|
+                  r.rating = ( int['rating'].to_f * 2 ).to_i
+                end
+              else
+                interaction = nil
+              end
+            when 11 #mass email
+              # nothing for now
+            end
+          end
+
+          if interaction
+            interaction.text = int['notes']
+            interaction.person = recruit
+            interaction.program = program
+            interaction.user = user
+            interaction.interaction_time = int['occurred_at'] || int['created_at']
+            interaction[:legacy_record] = int
+            interaction.save!
+          end
+        end
+      end
+    end
+  end
+
+  desc "tags RECRUIT_ID", "Print out tags for RECRUIT_ID"
+  def tags(recruit_id)
+    puts tags_for_recruit(recruit_id).inspect
+  end
+
+  private
+  def db
+    @__db ||= Mysql.connect('localhost', 'root', nil, 'scoutforce_integration')
+  end
+
+  def logger
+    @__logger ||= Logger.new('log/migrate.log')
+  end
+
+  def find_account_by_subdomain(subdomain)
+    res = db.query("SELECT * FROM accounts WHERE subdomain = '#{subdomain}'")
+    account = res.fetch_hash
+
+    raise "subdomain #{subdomain} not found" unless account
+
+    account
+  end
+
+  def each_user_for_account(acct_id, &block)
+    res = db.query("SELECT * FROM users WHERE account_id = '#{acct_id}'")
+    res.each_hash(&block)
+  end
+
+  def each_recruit_for_account(acct_id, &block)
+    res = db.query("SELECT * FROM recruits WHERE account_id = '#{acct_id}' ORDER BY last_name")
+    res.each_hash(&block)
+  end
+
+  def each_interaction_for_recruit(rec_id, &block)
+    res = db.query("SELECT * FROM interactions WHERE recipient_id = '#{rec_id}' ORDER BY created_at asc")
+    res.each_hash(&block)
+  end
+
+  def tags_for_recruit(rec_id)
+    res = db.query("select t.name from recruits r left join taggings ta on ta.taggable_id = r.id left join tags t on t.id = ta.tag_id where r.id=#{rec_id} and ta.taggable_type = 'Recruit'")
+
+    res.extend Enumerable
+    res.to_a.flatten
+  end
+end
+
+Migrator.start

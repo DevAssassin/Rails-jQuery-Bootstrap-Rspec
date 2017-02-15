@@ -1,0 +1,2 @@
+Fabricator(:feedback) do
+end

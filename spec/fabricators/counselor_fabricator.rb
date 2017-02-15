@@ -1,0 +1,2 @@
+Fabricator(:counselor) do
+end
